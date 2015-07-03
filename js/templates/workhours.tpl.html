@@ -1,0 +1,17 @@
+<table style="border-collapse: collapse;">
+  <tr>{{#weekday}}<td>{{.}}</td>{{/weekday}}</tr>
+  {{#weeks}}
+  <tr>
+    {{#workHours}}
+    <td>{{index}}</td>
+    {{/workHours}}
+  </tr>
+  <tr style="border-bottom: 1px solid silver;">
+    {{#workHours}}
+    <td>{{#index}}<input type="number" value="{{value}}"
+      style="width: 32px;{{color}}"
+     >{{/index}}</td>
+    {{/workHours}}
+  </tr>
+  {{/weeks}}
+</table>

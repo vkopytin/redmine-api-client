@@ -1,0 +1,45 @@
+[{
+    "id": "1",
+    "number": "1",
+	"monthRate": 3500,
+	"hourRate": 21.87,
+	"workMonth": "January, 2015",
+    "fromDate": "February, 3, 2015",
+    "totalCost": 1749.6,
+    "totalCostText": "One thousand seven hundred forty nine dollars 60 cents",
+	"workHours": [4,4,0,0,4,4,4,4,4,0,0,4,4,4,4,4,0,0,4,4,4,4,4,0,0,4,4,4,4,4,0],
+	"plannedHours": [8,8,0,0,8,8,8,8,8,0,0,8,8,8,8,8,0,0,8,8,8,8,8,0,0,8,8,8,8,8,0]
+}, {
+    "id": "2",
+    "number": "2",
+	"monthRate": 3500,
+	"hourRate": 21.88,
+	"workMonth": "February, 2015",
+    "fromDate": "March, 12, 2015",
+    "totalCost": 2275.52,
+    "totalCostText": "Two thousands two hundreds seventy five dollars 52 cents",
+	"workHours": [0,4,4,4,4,4,0,0,4,4,4,4,4,0,0,4,4,4,4,8,0,0,8,8,8,8,8,0],
+	"plannedHours": [0,8,8,8,8,8,0,0,8,8,8,8,8,0,0,8,8,8,8,8,0,0,8,8,8,8,8,0]
+}, {
+    "id": "3",
+    "number": "3",
+	"monthRate": 3500,
+	"hourRate": 21.88,
+	"workMonth": "March, 2015",
+    "fromDate": "April, 12, 2015",
+    "totalCost": 2275.52,
+    "totalCostText": "Two thousands two hundreds seventy five dollars 52 cents",
+	"workHours": [0,8,8,8,4,0,0,0,8,8,12,8,8,0,0,8,8,8,8,8,0,0,8,8,8,8,8,0,0,8,8],
+	"plannedHours": [0,8,8,8,8,8,0,0,8,8,8,8,8,0,0,8,8,8,8,8,0,0,8,8,8,8,8,0,0,8,8]
+}, {
+    "id": "4",
+    "number": "4",
+	"monthRate": 3500,
+	"hourRate": 21.88,
+	"workMonth": "April, 2015",
+    "fromDate": "May, 12, 2015",
+    "totalCost": 2275.52,
+    "totalCostText": "Two thousands two hundreds seventy five dollars 52 cents",
+	"workHours": [8,8,8,0,0,8,8,8,8,8,0,0,8,8,8,8,8,0,0,8,8,8,8,8,0,0,8,8,8,8],
+	"plannedHours": [8,8,8,0,0,8,8,8,8,8,0,0,8,8,8,8,8,0,0,8,8,8,8,8,0,0,8,8,8,8]
+}]

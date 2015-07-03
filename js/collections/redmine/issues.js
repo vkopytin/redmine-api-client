@@ -1,0 +1,15 @@
+define(function (require) {
+    var BB = require('backbone');
+
+    return BB.Collection.extend({
+        url: function () {
+            return ['https://redmine.rebelmouse.com/projects', this.project, 'issues.json'].join('/');
+        },
+        initialize: function (items, options) {
+            this.project = options.project;
+        },
+        parse: function (data) {
+            return data.issues;
+        }
+    });
+});

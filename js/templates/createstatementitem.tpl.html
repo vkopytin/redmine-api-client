@@ -1,0 +1,66 @@
+<div>
+  <ul style="list-style: none; padding:6px 0px 3px 0; margin:0;">
+    <li class="tab-button" data-tab-item="0" style="border-radius: 5px 5px 0 0;display: inline; border: 1px solid silver; border-width: 1px 1px 0 1px; padding: 4px; margin: 0 0.5em 4px 0;">Details</li>
+    <li class="tab-button" data-tab-item="1" style="border-radius: 5px 5px 0 0;display: inline; border: 1px solid orange; border-width: 1px 1px 0 1px; padding: 4px; margin: 0 0.5em 0 0;">Work hours</li>
+    <li class="tab-button" data-tab-item="2" style="border-radius: 5px 5px 0 0;display: inline; border: 1px solid green; border-width: 1px 1px 0 1px; padding: 4px; margin: 0 0.5em 0 0;">Planned hours</li>
+  </ul>
+</div>
+<div class="tab-item" style="display: block;border: 1px solid silver;padding: 5px;">
+<div>
+  <label style="width:100px;display:inline-block;" for="field-1">
+    Number:
+  </label>
+  <input id="field-1" class="field" name="number" value="{{number}}" data-bind="number:val" />
+</div>
+<div>
+  <label style="width:100px;display:inline-block;" for="field-2">
+    Total Cost:
+  </label>
+  <input id="field-2" class="field" name="totalCost" value="{{totalCost}}" data-bind="totalCost:val" />
+</div>
+<div>
+  <label style="width:100px;display:inline-block;" for="field-3">
+    Month Rate:
+  </label>
+  <input id="field-3" class="field" name="monthRate" value="{{monthRate}}" data-bind="monthRate:val" />
+</div>
+<div>
+  <label style="width:100px;display:inline-block;" for="field-4">
+    Hour Rate:
+  </label>
+  <input id="field-4" class="field" name="hourRate" value="{{hourRate}}" data-bind="hourRate:val" />
+</div>
+<div>
+  <label style="width:100px;display:inline-block;" for="field-5">
+    Work Month:
+  </label>
+  <input id="field-5" class="field" name="workMonth" value="{{workMonth}}" data-bind="workMonth:val" />
+</div>
+<div>
+  <label style="width:100px;display:inline-block;" for="field-6">
+    Work Month #:
+  </label>
+  <input id="field-6" class="field" name="workMonthNumber" value="{{workMonthNumber}}" data-bind="workMonthNumber:val" />
+</div>
+<div>
+  <label style="width:100px;display:inline-block;" for="field-7">
+    From date:
+  </label>
+  <input id="field-7" class="field" name="fromDate" value="{{fromDate}}" data-bind="fromDate:val" />
+</div>
+<div>
+  <label style="width:100px;display:inline-block;" for="field-8">
+    Total Cost text:
+  </label>
+  <input id="field-8" class="field" name="totalCostText" value="{{totalCostText}}" data-bind="totalCostText:val" style="width: 400px"/>
+</div>
+</div>
+<div class="tab-item" style="display: none;border: 1px solid orange;">
+    <div class="work-hours-placeholder"></div>
+</div>
+<div class="tab-item" style="display: none;border: 1px solid green;">
+  <div class="planned-hours-placeholder"></div>
+</div>
+<div>
+  <button id="item-save">Save</button><button id="item-cancel">Cancel</button>
+</div>
