@@ -26,7 +26,7 @@ define(function (require) {
             this.dropdown.on('change:item', this.changeProject, this);
         },
         changeProject: function (options) {
-            this.options.router.navigate(['/redmine', options.key, this.options.query].join('/'), {trigger: true});
+            this.trigger('change:selected', options.key);
         },
         getProjects: function () {
             this.projects.fetch({
@@ -35,11 +35,14 @@ define(function (require) {
                 }
             });
         },
+        setSource: function (data) {
+            this.projects.set(data);
+        },
         render: function () {
 
             this.dropdown.setElement(this.$('.projects')).render();
 
-            _.defer(_.bind(this.getProjects, this), 50);
+            //_.defer(_.bind(this.getProjects, this), 50);
             return this;
         }
     });

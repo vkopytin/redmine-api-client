@@ -10,6 +10,7 @@ define(function (require) {
                 this.template = options.template;
                 BaseView.prototype.initialize.apply(this, arguments);
                 this.model.on('change', this.render, this);
+                this.model.on('remove', this.remove, this);
             },
             render: function () {
                 var html = this.template.render(_.extend(this.model.toJSON(), {

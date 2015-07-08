@@ -134,6 +134,9 @@ define(function (require) {
 			this.$el.html(html);
             return this;
         },
+        setSource: function (data, options) {
+            this.issues.set(data);
+        },
         render: function () {
             var view = this.renderTemplate();
 
@@ -141,7 +144,7 @@ define(function (require) {
                 view.render();
             });
 
-            _.defer(_.bind(this.getIssues, this), 50);
+            //_.defer(_.bind(this.getIssues, this), 50);
 
             return this;
         }

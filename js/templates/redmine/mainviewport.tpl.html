@@ -1,12 +1,51 @@
+<style type="text/css">
+.queries {
+    border: 1px solid gray;
+    list-style: none;
+    position: relative;
+    float: left;
+    margin: 0;
+    padding: 0;
+}
+.queries .current-item div {
+    background-color: #eee;
+}
+.queries li div:hover {
+	background-color: #ddd;
+}
+.queries li {
+    position:relative;
+    float:left;
+    margin:0;
+    padding: 0px;
+    width: 100px;
+    overflow: auto;
+    height: 22px;
+    margin:0 auto;
+    text-align: center;
+}
+.queries li:hover {
+    display:block;
+    overflow: initial;
+    z-index: 100;
+}
+.queries li:hover div {
+    background-color: #ddd;
+}
+.queries li div {
+    padding: 2px;
+    display:block;
+    color:#333;
+    text-decoration:none;
+    font-family:"HelveticaNeue","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+</style>
 <div class="project">Redmine - {{project}}</div>
-<div>
-  <button class="get-issues">Get issues</button>
-</div>
 <div class="projects-selector">
-    <select class="projects"></select>
+    <select class="projects" data-bind="ViewModel:project" data-source="ViewModel:projects"></select>
 </div>
 <div class="queries-selector">
-    <select class="queries"></select>
+    <ul class="queries" data-bind="ViewModel:query" data-source="ViewModel:queries"></ul>
 </div>
 <div class="container issues" data-type="views/redmine/redmine" data-template="text!templates/redmine.tpl.html">
 </div>
