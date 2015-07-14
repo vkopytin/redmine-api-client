@@ -14,9 +14,9 @@ define(function (require) {
             this.projects = new ProjectsCollection();
             this.dropdown = new DropDown({
                 ItemView: ItemView.extend({
-                    key: 'identifier',
+                    key: 'id',
                     isSelected: function () {
-                        return view.options.project === this.model.get('identifier')
+                        return view.options.project === this.model.get('id')
                     }
                 }),
                 collection: this.projects,
@@ -25,7 +25,23 @@ define(function (require) {
 
             this.dropdown.on('change:item', this.changeProject, this);
         },
+        set: function (name, value) {
+            switch (name) {
+                case 'source':
+                    this.setSource(value);
+            }
+        },
+        get: function (name) {
+            switch (name) {
+                case 'selected':
+                    return this.selectedId;
+            }
+        },
         changeProject: function (options) {
+            if (this.selectedModel) {
+                //this.selectedModel.set('selected', false);
+            }
+            this.selectedModel = options.key;
             this.trigger('change:selected', options.key);
         },
         getProjects: function () {
@@ -36,7 +52,15 @@ define(function (require) {
             });
         },
         setSource: function (data) {
-            this.projects.set(data);
+            var items = _.map(data, function (item) {
+                return {
+                    id: item.identifier,
+                    name: item.name,
+                    selected: item.identifier == this.options.project
+                };
+            }, this);
+            this.projects.set(items);
+            this.selectedId = this.options.query;
         },
         render: function () {
 

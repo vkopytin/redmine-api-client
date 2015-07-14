@@ -41,6 +41,18 @@ define(function (require) {
         createItemView: function (options) {
             return new (this.options.ItemView || this.ItemView)(options);
         },
+        set: function (name, value) {
+            switch (name) {
+                case 'source':
+                    this.setSource(value);
+            }
+        },
+        get: function (name) {
+            switch (name) {
+                case 'selected':
+                    return this.selectedModel.get(this.options.key);
+            }
+        },
         drawItem: function (model) {
             var item = this.createItemView({
                     model: model
@@ -54,7 +66,7 @@ define(function (require) {
             }
             this.selectedModel = model;
             if (model.get('selected')) {
-                this.trigger('change:selected', model.get('id'));
+                this.trigger('change:selected', model.get(this.options.key));
             }
         },
         setSource: function (data) {

@@ -35,6 +35,12 @@ define(function (require) {
             this.issues.on('add', this.drawItem, this);
             options.viewPort.$el.on('click', '.get-issues', _.bind(this.getIssues, this));
         },
+        set: function (name, value) {
+            switch (name) {
+                case 'source':
+                    this.setSource(value);
+            }
+        },
         getIssues: function () {
             var data = {
                     key: '480190b02690dc9b3ac2a2e68ae34c13961d1b88',
