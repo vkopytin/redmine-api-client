@@ -118,15 +118,16 @@ define(function (require) {
         },
         showRedmineInternal: function (project, query, offset) {
             var router = this;
+            _.has(router, 'view') && router.view.remove();
             require(['views/redmine/mainviewport'], function (View) {
-                var view = new View({
-                    el: 'body',
+                router.view = new View({
+                    el: $('<div/>').appendTo($('body')),
                     router: router,
                     project: project,
                     query: query,
                     offset: offset
                 });
-                view.render();
+                router.view.render();
             });
         }
     });

@@ -7,6 +7,10 @@ define(function (require) {
         SelectionList = require('views/selectionlist');
 
     return BB.Model.extend({
+        defaults: {
+            offset: 0,
+            limit: 100
+        },
         initialize: function (fields, options) {
             this.router = options.router;
             this.projects = new ProjectsCollection();
@@ -23,10 +27,12 @@ define(function (require) {
             this.on('change:query', this.changeQuery, this);
         },
         changeProject: function (model, project) {
+            this.set('offset', 0);
             var url = _.compact(['/redmine', project, this.get('query')]).join('/');
             this.router.navigate(url, {trigger: true});
         },
         changeQuery: function (model, query) {
+            this.set('offset', 0);
             var url = _.compact(['/redmine', this.get('project'), query]).join('/');
             this.router.navigate(url, {trigger: false});
             this.getIssues();
@@ -39,13 +45,14 @@ define(function (require) {
         },
         setIssues: function (collection) {
             this.set('issues', collection.toJSON());
+            this.set('totalCount', collection.totalCount);
         },
         getIssuesInternal: function () {
             var project = this.get('project'),
                 query = this.get('query'),
                 data = {
                     key: '480190b02690dc9b3ac2a2e68ae34c13961d1b88',
-                    limit: 100
+                    limit: this.get('limit')
                 };
 
             if (query) {
@@ -54,16 +61,21 @@ define(function (require) {
             if (this.get('offset')) {
                 data.offset = this.get('offset');
             }
-            this.set('loading', true);
             return this.issues.fetch({
+                //remove: !this.get('offset'),
                 data: data,
                 xheaders: {'Authorization': 'Y2hlOmd1ZXZhcmEyMDEyIQ=='}
             });
         },
         getIssues: function () {
+            this.set('loading', true);
             this.getIssuesInternal().always(_.bind(function () {
                 this.set('loading', false);
             }, this));
+        },
+        nextPage: function () {
+            this.set('offset', this.get('offset') + this.get('limit'));
+            this.getIssues();
         },
         requestData: function () {
             this.set('loading', true);

@@ -10,7 +10,8 @@ define(function (require) {
 
     return ViewPort.extend({
         events: {
-            'click .get-issues': 'getIssues'
+            'click .get-issues': 'getIssues',
+            'click .load-more': 'loadMore'
         },
         template: $T.compile(template),
         initialize: function (options) {
@@ -45,17 +46,25 @@ define(function (require) {
             }, this);
 
             this.viewModel.on('change:issues', function () {
-                this.viewContainer.set('source', this.viewModel.get('issues'), {
-                    reset: true
-                });
+                this.viewContainer.set('source', this.viewModel.get('issues'));
+            }, this);
+            this.viewModel.on('change:issues', function () {
+                this.$('.issues-loaded').text(this.viewModel.get('issues').length);
             }, this);
 
             this.viewModel.on('change:loading', function () {
                 this.showLoadingOverlay(this.viewModel.get('loading'));
             }, this);
+
+            this.viewModel.on('change:totalCount', function () {
+                this.$('.issues-total').text(this.viewModel.get('totalCount'));
+            }, this);
         },
         getIssues: function () {
             this.viewModel.requestData();
+        },
+        loadMore: function () {
+            this.viewModel.nextPage();
         },
         showLoadingOverlay: function (show) {
             this.$('.loading').toggleClass('hidden', !show);

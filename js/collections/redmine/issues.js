@@ -9,6 +9,7 @@ define(function (require) {
             this.project = options.project;
         },
         parse: function (data) {
+            this.totalCount = data.total_count;
             return data.issues;
         }
     });

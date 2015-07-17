@@ -124,7 +124,9 @@ define(function (require) {
             return this;
         },
         setSource: function (data, options) {
-            this.issues.set(data);
+            this.issues.set(data, {
+                reset: false
+            });
         },
         render: function () {
             var view = this.renderTemplate();
