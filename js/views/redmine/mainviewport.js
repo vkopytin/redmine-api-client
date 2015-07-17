@@ -49,9 +49,16 @@ define(function (require) {
                     reset: true
                 });
             }, this);
+
+            this.viewModel.on('change:loading', function () {
+                this.showLoadingOverlay(this.viewModel.get('loading'));
+            }, this);
         },
         getIssues: function () {
             this.viewModel.requestData();
+        },
+        showLoadingOverlay: function (show) {
+            this.$('.loading').toggleClass('hidden', !show);
         },
         render: function () {
             ViewPort.prototype.render.apply(this, arguments);

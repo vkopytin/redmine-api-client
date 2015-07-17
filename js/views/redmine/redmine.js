@@ -17,11 +17,12 @@ define(function (require) {
     return BaseView.extend({
         statusOrder: [
             "review", "feedback", "tested","new","suspended",
-            "in progress",
-            "ready for design testing","ready for testing","ready to deploy","resolved","live"
+            "ready to deploy","in progress",
+            "ready for design testing","ready for testing","resolved","live"
         ],
-        rowTemplate: $T.compile('<tr class="fixed_version" id="{{fixed_version.id}}">\
-    <td style="border-left: 2px solid gray;border-top: 1px solid silver;"><a href="https://redmine.rebelmouse.com/versions/{{fixed_version.id}}">{{fixed_version.name}}</a></td>\
+        rowTemplate: $T.compile('<tr class="fixed_version" data-id="{{fixed_version.id}}">\
+    <td colspan="3" style="border-left: 2px solid gray;border-top: 1px solid silver;text-align:center;"><a href="https://redmine.rebelmouse.com/versions/{{fixed_version.id}}">{{fixed_version.name}}</a></td>\
+    </tr><tr class="fixed_version" data-id="{{fixed_version.id}}" id="{{fixed_version.id}}">\
     <td class="to-do sorting" valign="top" style="border-top: 1px solid silver;"></td>\
     <td class="in-progress sorting" valign="top" style="border-top: 1px solid silver;"></td>\
     <td class="done sorting" valign="top" style="border-top: 1px solid silver;"></td></tr>'),
@@ -33,30 +34,12 @@ define(function (require) {
             BaseView.prototype.initialize.apply(this, arguments);
 
             this.issues.on('add', this.drawItem, this);
-            options.viewPort.$el.on('click', '.get-issues', _.bind(this.getIssues, this));
         },
         set: function (name, value) {
             switch (name) {
                 case 'source':
                     this.setSource(value);
             }
-        },
-        getIssues: function () {
-            var data = {
-                    key: '480190b02690dc9b3ac2a2e68ae34c13961d1b88',
-                    limit: 100
-                };
-
-            if (this.options.query) {
-                data.query_id = this.options.query;
-            }
-            if (this.options.offset) {
-                data.offset = this.options.offset;
-            }
-            this.issues.fetch({
-                data: data,
-                xheaders: {'Authorization': 'Y2hlOmd1ZXZhcmEyMDEyIQ=='}
-            });
         },
         drawItem: function (model) {
             var el = $('<div/>'),
@@ -82,9 +65,9 @@ define(function (require) {
 
             if ($.inArray(status.name.toLowerCase(), ["feedback on live", "review", "feedback", "tested","new","suspended"]) >= 0) {
                 this.$('#'+fixed_version.id+' .to-do').append(item.el);
-            } else if ($.inArray(status.name.toLowerCase(), ["in progress"]) >= 0) {
+            } else if ($.inArray(status.name.toLowerCase(), ["ready to deploy","in progress"]) >= 0) {
                 this.$('#'+fixed_version.id+' .in-progress').append(item.el);
-            } else if ($.inArray(status.name.toLowerCase(), ["ready for design testing","ready for testing","ready to deploy","resolved","live", "ready to test on live"]) >= 0) {
+            } else if ($.inArray(status.name.toLowerCase(), ["ready for design testing","ready for testing","resolved","live", "ready to test on live"]) >= 0) {
                 this.$('#'+fixed_version.id+' .done').append(item.el);
             } else {
                 console.log('Unexpected status: '+ status.name);
@@ -123,8 +106,8 @@ define(function (require) {
 
             var $fixedVersion = this.$('.fixed_version');
             $fixedVersion.sort(function (a, b) {
-                var l = parseInt($(a).attr('id')),
-                    r = parseInt($(b).attr('id'));
+                var l = parseInt($(a).data('id')),
+                    r = parseInt($(b).data('id'));
 
                 return (l > r) ? 1 : (l < r) ? -1 : 0;
             });
@@ -149,8 +132,6 @@ define(function (require) {
             this.loadChildren(function (view) {
                 view.render();
             });
-
-            //_.defer(_.bind(this.getIssues, this), 50);
 
             return this;
         }

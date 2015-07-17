@@ -1,4 +1,7 @@
 <style type="text/css">
+body {
+    font-family:Helvetica, Arial, Verdana, sans-serif;
+}
 .queries {
     border: 1px solid gray;
     list-style: none;
@@ -41,7 +44,32 @@
 .container *{
     font-size: smaller;
 }
+.loading .overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: gray;
+  opacity: 0.5;
+}
+.loading .image {
+  position: fixed;
+  z-index: 999;
+  height: 2em;
+  width: 2em;
+  overflow: show;
+  margin: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+.hidden {
+    display: none;
+}
 </style>
+<div style="position: fixed;top:0px;background-color:white;">
 <div class="project">Redmine - {{project}}</div>
 <div><button class="get-issues">Refresh</button></div>
 <div class="projects-selector">
@@ -50,5 +78,10 @@
 <div class="queries-selector">
     <ul class="queries" data-type="views/redmine/queries" data-selected="{bind query}" data-source="{bind queries}"></ul>
 </div>
-<div class="container issues" data-type="views/redmine/redmine" data-source="{bind issues}" data-template="text!templates/redmine.tpl.html">
+</div>
+<div class="container issues" data-type="views/redmine/redmine" data-source="{bind issues}" data-template="text!templates/redmine.tpl.html" style="margin-top: 110px;">
+</div>
+<div class="loading hidden">
+<div class="overlay"></div>
+<div class="image">Loading...</div>
 </div>

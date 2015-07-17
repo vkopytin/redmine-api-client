@@ -14,7 +14,12 @@ require.config({
 	  }
   }
 });
-
-require(['app'], function(App){
-    App.initialize();
-});
+if (isPhoneGap) {
+    require(['cordova.js', 'app'], function(cordova, App){
+        App.initialize(cordova);
+    });
+} else {
+    require(['app'], function(App){
+        App.initialize(false);
+    });
+}

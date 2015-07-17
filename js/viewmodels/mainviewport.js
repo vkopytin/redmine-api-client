@@ -40,7 +40,7 @@ define(function (require) {
         setIssues: function (collection) {
             this.set('issues', collection.toJSON());
         },
-        getIssues: function () {
+        getIssuesInternal: function () {
             var project = this.get('project'),
                 query = this.get('query'),
                 data = {
@@ -54,24 +54,34 @@ define(function (require) {
             if (this.get('offset')) {
                 data.offset = this.get('offset');
             }
-            this.issues.fetch({
+            this.set('loading', true);
+            return this.issues.fetch({
                 data: data,
                 xheaders: {'Authorization': 'Y2hlOmd1ZXZhcmEyMDEyIQ=='}
             });
         },
+        getIssues: function () {
+            this.getIssuesInternal().always(_.bind(function () {
+                this.set('loading', false);
+            }, this));
+        },
         requestData: function () {
-            this.projects.fetch({
-                data: {
-                    key: '480190b02690dc9b3ac2a2e68ae34c13961d1b88'
-                }
-            });
-            this.queries.fetch({
-                data: {
-                    key: '480190b02690dc9b3ac2a2e68ae34c13961d1b88'
-                }
-            });
-
-            this.getIssues();
+            this.set('loading', true);
+            $.when(
+                this.projects.fetch({
+                    data: {
+                        key: '480190b02690dc9b3ac2a2e68ae34c13961d1b88'
+                    }
+                }),
+                this.queries.fetch({
+                    data: {
+                        key: '480190b02690dc9b3ac2a2e68ae34c13961d1b88'
+                    }
+                }),
+                this.getIssuesInternal()
+            ).always(_.bind(function () {
+                this.set('loading', false);
+            }, this));
         }
     });
 });

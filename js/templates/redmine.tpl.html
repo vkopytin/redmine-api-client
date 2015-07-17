@@ -1,17 +1,18 @@
-{{=<< >>=}}<script type="text/template" id="item-template">
+{{=<< >>=}}
+<script type="text/template" id="item-template">
         <div data-sort-priority="{{priority.id}}" data-sort-date="{{updated_on}}" data-sort-status="{{statusLower}}" style="margin: 2px;border-left: 4px solid gray;border-right: 2px solid gray;border-top: 2px solid gray;border-bottom: 2px solid gray;border-radius: 5px;border-left-color:{{color_priority}};">
   <div style="background-color: lightBlue;border-top-left-radius:2px;border-top-right-radius:2px;">
-    <div style="padding: 2px 5px;font-align:center;">
-      <span>{{priority.name}}</span>/<span>{{tracker.name}}</span>:<span style="margin: 5px;"><strong><a href="https://redmine.rebelmouse.com/issues/{{id}}" target="_blank">{{id}}</a></strong></span>
+    <div style="padding: 2px 5px;font-align:center;font-size:x-small;">
+      <span>{{priority.name}}</span>/<span>{{tracker.name}}</span>:<span style="margin: 5px;font-size:x-small;font-weight: bold;"><a style="font-size:x-small;" href="https://redmine.rebelmouse.com/issues/{{id}}" target="_blank">{{id}}</a></span>
       <span style="float:right;padding:0px 5px;">{{status.name}}</span>
     </div>
   </div>
-  <div style="font-size:smaller;background-color: silver;padding: 6px 3px;">
+  <div style="font-size:x-small;background-color: silver;padding: 6px 3px;">
     <div><a href="https://redmine.rebelmouse.com/versions/{{fixed_version.id}}">{{fixed_version.name}}</a></div>
   </div>
-  <div style="font-size:small;margin: 6px 3px;"><a href="https://redmine.rebelmouse.com/issues/{{id}}">{{id}} - {{subject}}</a></div>
-  <div style="font-size:xx-small;padding:2px 5px;background-color: silver;border-bottom-left-radius:2px;border-bottom-right-radius:2px;">
-    <div style="float:left;font-size:small;"><input style="border: 0px;background-color:transparent;" type="text" value="{{for_git}}"/></div>
+  <div style="font-size:x-small;margin: 6px 3px;"><a href="https://redmine.rebelmouse.com/issues/{{id}}">{{id}} - {{subject}}</a></div>
+  <div style="font-size:x-small;padding:2px 5px;background-color: silver;border-bottom-left-radius:2px;border-bottom-right-radius:2px;">
+    <div style="float:left;font-size:x-small;"><input style="border: 0px;background-color:transparent;" type="text" value="{{for_git}}"/></div>
     <div>
       <span>&nbsp;</span><span style="float:right;">{{updated_on}}</span>
     </div>
@@ -20,14 +21,14 @@
     </div>
   </div>
 </div>
-</script><<={{ }}=>>
+</script>
+<<={{ }}=>>
+  <div class="issues-total"></div>
   <table class="issues-table">
-    <col width="10%"/>
-    <col width="30%"/>
-    <col width="30%"/>
-    <col width="30%"/>
+    <col width="33%"/>
+    <col width="33%"/>
+    <col width="33%"/>
     <tr>
-      <th>Version</th>
       <th class="to-do">to do</th>
       <th class="in-progress">in progress</th>
       <th class="done">done</th>
