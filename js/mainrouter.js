@@ -119,6 +119,7 @@ define(function (require) {
         showRedmineInternal: function (project, query, offset) {
             var router = this;
             _.has(router, 'view') && router.view.remove();
+            $('body').empty();
             require(['views/redmine/mainviewport'], function (View) {
                 router.view = new View({
                     el: $('<div/>').appendTo($('body')),
