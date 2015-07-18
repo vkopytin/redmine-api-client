@@ -69,7 +69,7 @@ body {
     display: none;
 }
 </style>
-<div style="position: fixed;top:0px;background-color:white;">
+<div>
 <div class="project">Redmine - {{project}}</div>
 <div><button class="get-issues">Refresh</button><span><a href="#redmine">All issues</a></span></div>
 <div class="projects-selector">
@@ -79,7 +79,7 @@ body {
     <ul class="queries" data-type="views/redmine/queries" data-selected="{bind query}" data-source="{bind queries}"></ul>
 </div>
 </div>
-<div class="container issues" data-type="views/redmine/redmine" data-source="{bind issues}" data-template="text!templates/redmine.tpl.html" style="margin-top: 110px;">
+<div class="container issues" data-type="views/redmine/redmine" data-source="{bind issues}" data-template="text!templates/redmine.tpl.html">
 </div>
 <div class="loading hidden">
 <div class="overlay"></div>
