@@ -53,12 +53,22 @@ define(function (require) {
             }, this);
 
             this.viewModel.on('change:loading', function () {
-                this.showLoadingOverlay(this.viewModel.get('loading'));
+                this.set('showLoadingOverlay', this.viewModel.get('loading'));
             }, this);
 
             this.viewModel.on('change:totalCount', function () {
-                this.$('.issues-total').text(this.viewModel.get('totalCount'));
+                this.set('totalCount', this.viewModel.get('totalCount'));
             }, this);
+        },
+        set: function (name, value) {
+            switch (name) {
+                case 'totalCount':
+                    this.$('.issues-total').text(value);
+                    break;
+                case 'showLoadingOverlay':
+                    this.showLoadingOverlay(value);
+                    break;
+            }
         },
         getIssues: function () {
             this.viewModel.requestData();
