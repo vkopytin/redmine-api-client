@@ -3,7 +3,7 @@ define(function (require) {
 
     return BB.Collection.extend({
         url: function () {
-            return ['https://redmine.rebelmouse.com/projects', this.project, 'issues.json'].join('/');
+            return ['https://che:guevara2012!@redmine.rebelmouse.com/projects', this.project, 'issues.json'].join('/');
         },
         initialize: function (items, options) {
             this.project = options.project;
