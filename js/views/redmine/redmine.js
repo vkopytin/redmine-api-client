@@ -17,7 +17,8 @@ define(function (require) {
     return BaseView.extend({
         statusOrder: [
             "review", "feedback", "tested","new","suspended",
-            "ready to deploy","in progress",
+            "ready to deploy",
+            "in progress",
             "ready for design testing","ready for testing","resolved","live"
         ],
         rowTemplate: $T.compile('<tr class="fixed_version" data-id="{{fixed_version.id}}">\
@@ -25,6 +26,7 @@ define(function (require) {
     </tr><tr class="fixed_version" data-id="{{fixed_version.id}}" id="{{fixed_version.id}}">\
     <td class="to-do sorting" valign="top" style="border-top: 1px solid silver;"></td>\
     <td class="in-progress sorting" valign="top" style="border-top: 1px solid silver;"></td>\
+    <td class="to-deploy sorting" valign="top" style="border-top: 1px solid silver;"></td>\
     <td class="done sorting" valign="top" style="border-top: 1px solid silver;"></td></tr>'),
         initialize: function (options) {
             this.template = options.template;
@@ -65,8 +67,10 @@ define(function (require) {
 
             if ($.inArray(status.name.toLowerCase(), ["feedback on live", "review", "feedback", "tested","new","suspended"]) >= 0) {
                 this.$('#'+fixed_version.id+' .to-do').append(item.el);
-            } else if ($.inArray(status.name.toLowerCase(), ["ready to deploy","in progress"]) >= 0) {
+            } else if ($.inArray(status.name.toLowerCase(), ["in progress"]) >= 0) {
                 this.$('#'+fixed_version.id+' .in-progress').append(item.el);
+            } else if ($.inArray(status.name.toLowerCase(), ["ready to deploy"]) >= 0) {
+                this.$('#'+fixed_version.id+' .to-deploy').append(item.el);
             } else if ($.inArray(status.name.toLowerCase(), ["ready for design testing","ready for testing","resolved","live", "ready to test on live"]) >= 0) {
                 this.$('#'+fixed_version.id+' .done').append(item.el);
             } else {
