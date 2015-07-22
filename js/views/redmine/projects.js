@@ -14,9 +14,9 @@ define(function (require) {
             this.projects = new ProjectsCollection();
             this.dropdown = new DropDown({
                 ItemView: ItemView.extend({
-                    key: 'id',
+                    key: 'identifier',
                     isSelected: function () {
-                        return view.options.project === this.model.get('id')
+                        return view.options.project === this.model.get('identifier')
                     }
                 }),
                 collection: this.projects,
@@ -41,17 +41,11 @@ define(function (require) {
             this.selectedId = options.key;
             this.trigger('change:selected', options.key);
         },
-        getProjects: function () {
-            this.projects.fetch({
-                data: {
-                    key: '480190b02690dc9b3ac2a2e68ae34c13961d1b88'
-                }
-            });
-        },
         setSource: function (data) {
             var items = _.map(data, function (item) {
                 return {
-                    id: item.identifier,
+                    id: item.id,
+                    identifier: item.identifier,
                     name: item.name,
                     selected: item.identifier == this.options.project
                 };
@@ -63,7 +57,6 @@ define(function (require) {
 
             this.dropdown.setElement(this.$('.projects')).render();
 
-            //_.defer(_.bind(this.getProjects, this), 50);
             return this;
         }
     });
