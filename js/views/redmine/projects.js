@@ -38,10 +38,7 @@ define(function (require) {
             }
         },
         changeProject: function (options) {
-            if (this.selectedModel) {
-                //this.selectedModel.set('selected', false);
-            }
-            this.selectedModel = options.key;
+            this.selectedId = options.key;
             this.trigger('change:selected', options.key);
         },
         getProjects: function () {
@@ -60,7 +57,7 @@ define(function (require) {
                 };
             }, this);
             this.projects.set(items);
-            this.selectedId = this.options.query;
+            this.selectedId = this.options.project;
         },
         render: function () {
 

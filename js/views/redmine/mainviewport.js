@@ -31,8 +31,8 @@ define(function (require) {
             });
         },
         bindView: function () {
-            this.projects.on('change:selected', function (project) {
-                this.viewModel.set('project', project);
+            this.projects.on('change:selected', function () {
+                this.viewModel.set('project', this.projects.get('selected'));
             }, this);
             this.queries.on('change:selected', function (query) {
                 this.viewModel.set('query', this.queries.get('selected'));
