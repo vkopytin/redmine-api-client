@@ -5,8 +5,7 @@ require.config({
     jquery: 'libs/jquery-1.11.2',
     hogan: 'libs/hogan-3.0.2.amd',
     underscore: 'libs/underscore',
-    backbone: 'libs/backbone',
-    localStorage: 'libs/backbone.localStorage'
+    backbone: 'libs/backbone'
   },
   shim: {
 	  localStorage: {
