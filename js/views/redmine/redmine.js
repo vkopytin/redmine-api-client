@@ -22,7 +22,7 @@ define(function (require) {
             "ready for design testing","ready for testing","resolved","live"
         ],
         rowTemplate: $T.compile('<tr class="fixed_version" data-id="{{fixed_version.id}}">\
-    <td colspan="3" style="border-left: 2px solid gray;border-top: 1px solid silver;text-align:center;"><a href="https://redmine.rebelmouse.com/versions/{{fixed_version.id}}">{{fixed_version.name}}</a></td>\
+    <td colspan="4" style="border-left: 2px solid gray;border-top: 1px solid silver;text-align:center;"><a href="https://redmine.rebelmouse.com/versions/{{fixed_version.id}}">{{fixed_version.name}}</a></td>\
     </tr><tr class="fixed_version" data-id="{{fixed_version.id}}" id="{{fixed_version.id}}">\
     <td class="to-do sorting" valign="top" style="border-top: 1px solid silver;"></td>\
     <td class="in-progress sorting" valign="top" style="border-top: 1px solid silver;"></td>\
