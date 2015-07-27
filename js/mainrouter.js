@@ -1,7 +1,8 @@
 define(function (require) {
     var $ = require('jquery'),
         _ = require('underscore'),
-        BB = require('backbone');
+        BB = require('backbone'),
+        $T = require('hogan');
 
     return BB.Router.extend({
         routes: {
@@ -33,7 +34,12 @@ define(function (require) {
             var router = this;
             _.has(router, 'view') && router.view.remove();
             $('body').empty();
-            require(['views/redmine/mainviewport'], function (View) {
+            var path = 'views/redmine/mainviewport'.split('/');
+            define(path.join('_'), [path.join('/')], function (View) {
+                return View.extend({
+                });
+            });
+            require([path.join('_')], function (View) {
                 router.view = new View({
                     el: $('<div/>').appendTo($('body')),
                     router: router,

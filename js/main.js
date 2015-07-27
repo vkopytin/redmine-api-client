@@ -5,9 +5,11 @@ require.config({
     jquery: 'libs/jquery-1.11.2',
     hogan: 'libs/hogan-3.0.2.amd',
     underscore: 'libs/underscore',
-    backbone: 'libs/backbone'
+    backbone: 'libs/backbone',
+    bootstrap: 'bootstrap'
   },
   shim: {
+      bootstrap : { 'deps' :['jquery'] },
 	  localStorage: {
 	    deps: ['backbone'],
 	    exports: 'Backbone'
@@ -15,11 +17,11 @@ require.config({
   }
 });
 if (isPhoneGap) {
-    require(['cordova.js', 'app'], function(cordova, App){
+    require(['cordova.js', 'app', 'bootstrap'], function(cordova, App){
         App.initialize(cordova);
     });
 } else {
-    require(['app'], function(App){
+    require(['app', 'bootstrap'], function(App){
         App.initialize(false);
     });
 }

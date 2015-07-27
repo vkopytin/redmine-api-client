@@ -1,5 +1,6 @@
 define(function (require) {
-    var _ = require('underscore'),
+    var $ = require('jquery'),
+        _ = require('underscore'),
         BB = require('backbone'),
         ViewPort = require('views/viewport'),
         $T = require('hogan'),

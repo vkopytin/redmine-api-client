@@ -11,7 +11,7 @@ define(function (require) {
         template: $T.compile(''),
         ItemView: BB.View.extend({
             tagName: 'li',
-            template: $T.compile('<div><label>{{name}}</label></div>'),
+            template: $T.compile('<a href="#">{{name}} {{#selected}}<span class="sr-only">(current)</span>{{/selected}}</a>'),
             events: {
                 'click': 'clickHandler'
             },
@@ -22,12 +22,13 @@ define(function (require) {
                 return !!this.model.get('selected');
             },
             clickHandler: function (evnt) {
+                evnt && evnt.preventDefault();
                 this.model.set('selected', true);
             },
             render: function () {
                 this.$el.html(this.template.render(this.model.toJSON()));
 
-                this.$el.toggleClass('current-item', this.isSelected());
+                this.$el.toggleClass('active', this.isSelected());
                 this.$el.attr('selected', this.isSelected());
 
                 return this;
@@ -82,7 +83,8 @@ define(function (require) {
         },
         render: function () {
             var html = this.template.render({});
-            this.$el.html(html);
+            //this.$el.html(html);
+            this.$el.append(html);
             
             return this;
         }

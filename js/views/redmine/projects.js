@@ -4,7 +4,7 @@ define(function (require) {
         BB = require('backbone'),
         $T = require('hogan'),
         BaseView = require('views/base'),
-        DropDown = require('views/dropdown'),
+        DropDown = require('views/dropdown_menu'),
         ItemView = require('views/itemview'),
         ProjectsCollection = require('collections/redmine/projects');
 
