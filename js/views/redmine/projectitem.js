@@ -6,11 +6,38 @@ define(function (require) {
         BaseView = require('views/base');
 
         return BaseView.extend({
+            events: {
+                'click .show-description': 'toggleDescription',
+                'click .show-comments': 'showComments'
+            },
             initialize: function (options) {
                 this.template = options.template;
                 BaseView.prototype.initialize.apply(this, arguments);
                 this.model.on('change', this.render, this);
                 this.model.on('remove', this.remove, this);
+            },
+            toggleDescription: function (evnt) {
+                evnt && evnt.preventDefault();
+                this.$('.description').toggleClass('hidden');
+            },
+            showComments: function (evnt) {
+                evnt && evnt.preventDefault();
+                if (!this.$('.comments-list').hasClass('hidden')) {
+                    this.$('.comments-list').toggleClass('hidden');
+                    return ;
+                }
+
+                this.model.fetch({
+                    data: {
+                        key: '480190b02690dc9b3ac2a2e68ae34c13961d1b88',
+                        include: 'journals'
+                    },
+                    success: _.bind(function (model) {
+                        _.each(model.get('journals'), function (item) {
+                        }, this);
+                        this.$('.comments-list').toggleClass('hidden');
+                    }, this)
+                });
             },
             render: function () {
                 var html = this.template.render(_.extend(this.model.toJSON(), {

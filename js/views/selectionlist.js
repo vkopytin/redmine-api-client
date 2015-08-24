@@ -35,6 +35,7 @@ define(function (require) {
             }
         }),
         initialize: function () {
+            this.collection = new BB.Collection();
             BaseView.prototype.initialize.apply(this, arguments);
             this.collection.on('add', this.drawItem, this);
             this.collection.on('change:selected', this.changeItem, this);
@@ -83,8 +84,7 @@ define(function (require) {
         },
         render: function () {
             var html = this.template.render({});
-            //this.$el.html(html);
-            this.$el.append(html);
+            this.$el.html(html);
             
             return this;
         }

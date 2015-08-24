@@ -17,19 +17,6 @@ define(function (require) {
         template: $T.compile(template),
         initialize: function (options) {
             ViewPort.prototype.initialize.apply(this, arguments);
-            this.viewModel = new ViewModel({
-                project: options.project,
-                query: options.query
-            }, options);
-
-            this.projects = new ProjectsView({
-                project: this.viewModel.get('project')
-            });
-            this.queries = new SelectionList({
-                key: 'id',
-                collection: new BB.Collection(),
-                query: this.viewModel.get('query')
-            });
         },
         bindView: function () {
             this.projects.on('change:selected', function () {
@@ -91,7 +78,9 @@ define(function (require) {
                 .setElement(this.$('.queries'))
                 .render();
 
-            this.bindView();
+            this.viewContainer
+                .setElement(this.$('.container'))
+                .render();
 
             _.defer(_.bind(this.getIssues, this), 60);
         }

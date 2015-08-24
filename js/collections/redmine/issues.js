@@ -1,7 +1,9 @@
 define(function (require) {
-    var BB = require('backbone');
+    var BB = require('backbone'),
+        Model = require('models/redmine/issue');
 
     return BB.Collection.extend({
+        model: Model,
         url: function () {
             return ['https://che:guevara2012!@redmine.rebelmouse.com/projects', this.project, 'issues.json'].join('/');
         },

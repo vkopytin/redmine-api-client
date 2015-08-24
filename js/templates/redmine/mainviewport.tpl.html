@@ -1,7 +1,7 @@
-<nav class="navbar navbar-default  navbar-static-top">
+<nav class="navbar navbar-default">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header" style="display:inline;">
+    <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
         <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
@@ -13,10 +13,14 @@
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav queries">
-        <li class="dropdown projects-selector">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Projects <span class="caret"></span></a>
-          <ul class="projects dropdown-menu" data-type="views/redmine/projects" data-selected="{bind project}" data-source="{bind projects}">
+      <ul class="nav navbar-nav">
+        <li id="projects" class="dropdown projects-selector"
+          data-type="views/redmine/projects"
+          data-selected="{bind project}"
+          data-source="{bind projects}"
+         >
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="title">{{project}}&nbsp;</span><span class="caret"></span></a>
+          <ul class="projects dropdown-menu">
           </ul>
         </li>
       </ul>
@@ -27,7 +31,7 @@
         <button type="submit" class="btn btn-default">Submit</button>
       </form>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">Link</a></li>
+        <li><a href="#">Options</a></li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
           <ul class="dropdown-menu">
@@ -39,12 +43,21 @@
           </ul>
         </li>
       </ul>
+      <ul id="queries" class="nav navbar-nav queries"
+        data-type="views/selectionlist"
+        data-key="id"
+       >
+      </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
-<div class="container issues" data-type="views/redmine/redmine" data-source="{bind issues}" data-template="text!templates/redmine/redmine.tpl.html">
-</div>
-<div class="loading hidden">
-  <div class="overlay"></div>
-  <div class="image">Loading...</div>
-</div>
+  <div id="viewContainer" class="container issues"
+    data-type="views/redmine/redmine"
+    data-source="{bind issues}"
+    data-template="text!templates/redmine/redmine.tpl.html"
+   >
+  </div>
+  <div class="loading hidden">
+    <div class="overlay"></div>
+    <div class="image">Loading...</div>
+  </div>
 </nav>

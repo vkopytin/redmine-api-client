@@ -31,23 +31,92 @@ define(function (require) {
             this.showRedmineInternal(project, query, offset);
         },
         showRedmineInternal: function (project, query, offset) {
-            var router = this;
+            var router = this,
+                viewModelType = 'viewmodels/mainviewport',
+                path = 'views/redmine/mainviewport'.split('/'),
+                tplPath = 'text!templates/redmine/mainviewport.tpl.html';
+
             _.has(router, 'view') && router.view.remove();
             $('body').empty();
-            var path = 'views/redmine/mainviewport'.split('/');
-            define(path.join('_'), [path.join('/')], function (View) {
-                return View.extend({
+
+            require([tplPath, viewModelType], function (tplText, ViewModel) {
+                var template = $T.compile(tplText),
+                    meta = $(template.render()),
+                    deps = [path.join('/')],
+                    templates = [],
+                    typeDeps = [];
+
+                meta.find('[data-type]').each(function () {
+                    var $el = $(this),
+                        templatePath = $el.data('template'),
+                        typePath = $el.data('type');
+
+                    deps.push(typePath);
+                    templatePath && templates.push($el.data('template'));
+                    typeDeps.push({
+                        name: $el.prop('id'),
+                        type: typePath,
+                        options: $el.data(),
+                        templatePath: templatePath
+                    });
                 });
-            });
-            require([path.join('_')], function (View) {
-                router.view = new View({
-                    el: $('<div/>').appendTo($('body')),
-                    router: router,
-                    project: project,
-                    query: query,
-                    offset: offset
+
+                define(path.join('_'), deps.concat(templates), function () {
+                    var types = [].slice.call(arguments, 0, deps.length),
+                        View = types.shift();
+                        initMethods = []; 
+
+                    _.each(types, function (TypeInfo, index) {
+                        initMethods.push(function (viewModel) {
+                            var options = typeDeps[index] ? typeDeps[index].options : {},
+                                templateTxt = typeDeps[index] && typeDeps[index].templatePath ? require(typeDeps[index].templatePath) : false,
+                                customOptions = _.extend(options,
+                                    this.options,
+                                    viewModel.toJSON(), {
+                                        template: templateTxt ? $T.compile(templateTxt) : false
+                                    }
+                                ),
+                                inst = new TypeInfo(options),
+                                propName = typeDeps[index] ? typeDeps[index].name : false;
+
+                            if (propName) {
+                                this[propName] = inst;
+                            }
+
+                            return inst;
+                        });
+                    });
+
+                    return View.extend({
+                        initialize: function () {
+                            var view = this,
+                                args = [].slice.call(arguments, 0),
+                                viewModel = new ViewModel(this.options, {
+                                    router: router
+                                }),
+                                subViews = [];
+
+                            _.each(initMethods, function (func) {
+                                subViews.push(func.apply(view, [viewModel]));
+                            });
+                            this.viewModel = viewModel;
+
+                            View.prototype.initialize.apply(view, args);
+
+                            this.bindView(this.viewModel);
+                        }
+                    });
                 });
-                router.view.render();
+                require([path.join('_')], function (View) {
+                    router.view = new View({
+                        el: $('<div/>').appendTo($('body')),
+                        router: router,
+                        project: project,
+                        query: query,
+                        offset: offset
+                    });
+                    router.view.render();
+                });
             });
         }
     });

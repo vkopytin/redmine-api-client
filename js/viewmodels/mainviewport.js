@@ -52,7 +52,9 @@ define(function (require) {
                 query = this.get('query'),
                 data = {
                     key: '480190b02690dc9b3ac2a2e68ae34c13961d1b88',
-                    limit: this.get('limit')
+                    limit: this.get('limit'),
+                    include: 'journals',
+                    project_id: project
                 };
 
             if (query) {
