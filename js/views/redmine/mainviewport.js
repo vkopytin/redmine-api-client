@@ -18,36 +18,6 @@ define(function (require) {
         initialize: function (options) {
             ViewPort.prototype.initialize.apply(this, arguments);
         },
-        bindView: function () {
-            this.projects.on('change:selected', function () {
-                this.viewModel.set('project', this.projects.get('selected'));
-            }, this);
-            this.queries.on('change:selected', function (query) {
-                this.viewModel.set('query', this.queries.get('selected'));
-            }, this);
-
-            this.viewModel.on('change:projects', function () {
-                this.projects.set('source', this.viewModel.get('projects'));
-            }, this);
-            this.viewModel.on('change:queries', function () {
-                this.queries.set('source', this.viewModel.get('queries'));
-            }, this);
-
-            this.viewModel.on('change:issues', function () {
-                this.viewContainer.set('source', this.viewModel.get('issues'));
-            }, this);
-            this.viewModel.on('change:issues', function () {
-                this.$('.issues-loaded').text(this.viewModel.get('issues').length);
-            }, this);
-
-            this.viewModel.on('change:loading', function () {
-                this.set('showLoadingOverlay', this.viewModel.get('loading'));
-            }, this);
-
-            this.viewModel.on('change:totalCount', function () {
-                this.set('totalCount', this.viewModel.get('totalCount'));
-            }, this);
-        },
         set: function (name, value) {
             switch (name) {
                 case 'totalCount':
@@ -55,6 +25,9 @@ define(function (require) {
                     break;
                 case 'showLoadingOverlay':
                     this.showLoadingOverlay(value);
+                    break;
+                case 'issuesLoaded':
+                    this.$('.issues-loaded').text(value.length);
                     break;
             }
         },

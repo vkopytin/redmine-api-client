@@ -99,7 +99,9 @@ define(function (require) {
                             customOptions = _.extend(options,
                                 this.options,
                                 viewModel.toJSON(), {
-                                    template: templateTxt ? $T.compile(templateTxt) : false
+                                    viewModel: viewModel,
+                                    template: templateTxt ? $T.compile(templateTxt) : false,
+                                    bind: options.bind
                                 }
                             ),
                             inst = new TypeInfo(options),
@@ -120,7 +122,8 @@ define(function (require) {
                         var view = this,
                             args = [].slice.call(arguments, 0),
                             viewModel = ViewModel ? new ViewModel(this.options, {
-                            }) : null,
+                                router: this.options.router
+                            }) : this.options.viewModel,
                             subViews = [];
 
                         _.each(initMethods, function (func) {
@@ -152,28 +155,24 @@ define(function (require) {
         },
         showRedmineInternal: function (project, query, offset) {
             var router = this,
-                $el = $('<div/>'),
-                $body = $('body');
+                $el = $('.mainview');
 
-            this.buildMetadata($body)
+            this.buildMetadata($el)
             .then(function (moduleName, deps, extra, typeDeps, ViewModel) {
 
                 return router.defineModule(moduleName, deps, extra, typeDeps, ViewModel);
 
             }).then(function (moduleName) {
-                return router.createView(moduleName, {
+                return router.createView(moduleName, _.extend({
                     el: $el,
                     router: router,
                     project: project,
                     query: query,
                     offset: offset
-                });
+                }, $el.data()));
             }).then(function (view) {
-                $body.empty();
 
                 view.render();
-
-                $el.appendTo($('body'));
             });
         }
     });

@@ -13,7 +13,18 @@ define(function (require) {
 				'app'
 			));
         },
-        bindView: function () {
+        bindView: function (viewModel) {
+            var bind = this.options.bind;
+            _.each(bind, function (key, value) {
+                var key = key,
+                    value = value;
+                this.on('change:' + value, function () {
+                    viewModel.set(key, this.get(value));
+                }, this);
+                viewModel.on('change:' + key, function () {
+                    this.set(value, viewModel.get(key));
+                }, this);
+            }, this);
         },
         getApp: function() {
             return this.app;

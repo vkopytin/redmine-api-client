@@ -40,11 +40,18 @@
         <title>Redmine client</title>
     </head>
     <body>
-        <div class="app">
-            <h1>Apache Cordova</h1>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to Device</p>
-                <p class="event received">Device is Ready</p>
+        <div class="mainview"
+         data-viewmodel="viewmodels/mainviewport"
+         data-type="views/redmine/mainviewport"
+         data-template="text!templates/redmine/mainviewport.tpl.html"
+         data-bind='{"issuesLoaded": "issues","showLoadingOverlay":"loading","totalCount":"totalCount"}'
+        >
+            <div class="app">
+                <h1>Apache Cordova</h1>
+                <div id="deviceready" class="blink">
+                    <p class="event listening">Connecting to Device</p>
+                    <p class="event received">Device is Ready</p>
+                </div>
             </div>
         </div>
         <!--script type="text/javascript" src="cordova.js"></script-->

@@ -16,8 +16,7 @@
       <ul class="nav navbar-nav">
         <li id="projects" class="dropdown projects-selector"
           data-type="views/redmine/projects"
-          data-selected="{bind project}"
-          data-source="{bind projects}"
+          data-bind='{"selected":"project", "source": "projects"}'
          >
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="title">{{project}}&nbsp;</span><span class="caret"></span></a>
           <ul class="projects dropdown-menu">
@@ -45,6 +44,7 @@
       </ul>
       <ul id="queries" class="nav navbar-nav queries"
         data-type="views/selectionlist"
+        data-bind='{"selected": "query", "source": "queries"}'
         data-key="id"
        >
       </ul>
@@ -52,7 +52,7 @@
   </div><!-- /.container-fluid -->
   <div id="viewContainer" class="container issues"
     data-type="views/redmine/redmine"
-    data-source="{bind issues}"
+    data-bind='{"source": "issues"}'
     data-template="text!templates/redmine/redmine.tpl.html"
    >
   </div>
