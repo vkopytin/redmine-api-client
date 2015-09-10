@@ -13,6 +13,8 @@ define(function (require) {
 				'app'
 			));
         },
+        bindView: function () {
+        },
         getApp: function() {
             return this.app;
         },

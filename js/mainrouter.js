@@ -30,93 +30,150 @@ define(function (require) {
         showRedmineByProjectAndQueryAndOffset: function (project, query, offset) {
             this.showRedmineInternal(project, query, offset);
         },
-        showRedmineInternal: function (project, query, offset) {
+        buildMetadata: function ($el) {
             var router = this,
-                viewModelType = 'viewmodels/mainviewport',
-                path = 'views/redmine/mainviewport'.split('/'),
-                tplPath = 'text!templates/redmine/mainviewport.tpl.html';
+                res = $.Deferred(),
+                viewModelType = $el.data('viewmodel'),
+                typePath = $el.data('type'),
+                templatePath = $el.data('template');
 
-            _.has(router, 'view') && router.view.remove();
-            $('body').empty();
-
-            require([tplPath, viewModelType], function (tplText, ViewModel) {
+            require([templatePath, viewModelType], function (tplText, ViewModel) {
                 var template = $T.compile(tplText),
                     meta = $(template.render()),
-                    deps = [path.join('/')],
+                    deps = [typePath],
                     templates = [],
-                    typeDeps = [];
+                    typeDeps = [],
+                    async;
 
                 meta.find('[data-type]').each(function () {
                     var $el = $(this),
                         templatePath = $el.data('template'),
-                        typePath = $el.data('type');
+                        typePath = $el.data('type'),
+                        moduleName = typePath.replace(/\//g, '_');
 
-                    deps.push(typePath);
+                    deps.push(moduleName);
                     templatePath && templates.push($el.data('template'));
                     typeDeps.push({
                         name: $el.prop('id'),
-                        type: typePath,
+                        type: moduleName,
                         options: $el.data(),
                         templatePath: templatePath
                     });
+
+                    async = $.when(async, router.buildMetadata($el)
+                        .then(function (moduleName, deps, extra, typeDeps, ViewModel) {
+                            return router.defineModule(moduleName, deps, extra, typeDeps, ViewModel);
+
+                        }));
+                    //.then(function (moduleName) {
+
+                    //    return router.createView(moduleName, _.extend({
+                    //        el: $el
+                    //    }, $el.data()));
+
+                    //}).then(function (view) {
+
+                    //    view.render();
+
+                    //});
                 });
 
-                define(path.join('_'), deps.concat(templates), function () {
-                    var types = [].slice.call(arguments, 0, deps.length),
-                        View = types.shift();
-                        initMethods = []; 
+                $.when(async).then(function () {
+                    res.resolve(typePath.replace(/\//g, '_'), deps, templates, typeDeps, ViewModel);
+                });
+            });
 
-                    _.each(types, function (TypeInfo, index) {
-                        initMethods.push(function (viewModel) {
-                            var options = typeDeps[index] ? typeDeps[index].options : {},
-                                templateTxt = typeDeps[index] && typeDeps[index].templatePath ? require(typeDeps[index].templatePath) : false,
-                                customOptions = _.extend(options,
-                                    this.options,
-                                    viewModel.toJSON(), {
-                                        template: templateTxt ? $T.compile(templateTxt) : false
-                                    }
-                                ),
-                                inst = new TypeInfo(options),
-                                propName = typeDeps[index] ? typeDeps[index].name : false;
+            return res.promise();
+        },
+        defineModule: function (moduleName, deps, extra, typeDeps, ViewModel) {
+            console.log('Module "' + moduleName + '" defined.');
+            define(moduleName, deps.concat(extra), function () {
+                var types = [].slice.call(arguments, 0, deps.length),
+                    View = types.shift(),
+                    initMethods = []; 
 
-                            if (propName) {
-                                this[propName] = inst;
-                            }
+                _.each(types, function (TypeInfo, index) {
+                    initMethods.push(function (viewModel) {
+                        var options = typeDeps[index] ? typeDeps[index].options : {},
+                            templateTxt = typeDeps[index] && typeDeps[index].templatePath ? require(typeDeps[index].templatePath) : false,
+                            customOptions = _.extend(options,
+                                this.options,
+                                viewModel.toJSON(), {
+                                    template: templateTxt ? $T.compile(templateTxt) : false
+                                }
+                            ),
+                            inst = new TypeInfo(options),
+                            propName = typeDeps[index] ? typeDeps[index].name : false;
 
-                            return inst;
-                        });
-                    });
-
-                    return View.extend({
-                        initialize: function () {
-                            var view = this,
-                                args = [].slice.call(arguments, 0),
-                                viewModel = new ViewModel(this.options, {
-                                    router: router
-                                }),
-                                subViews = [];
-
-                            _.each(initMethods, function (func) {
-                                subViews.push(func.apply(view, [viewModel]));
-                            });
-                            this.viewModel = viewModel;
-
-                            View.prototype.initialize.apply(view, args);
-
-                            this.bindView(this.viewModel);
+                        if (propName) {
+                            this[propName] = inst;
                         }
+
+                        return inst;
                     });
                 });
-                require([path.join('_')], function (View) {
-                    router.view = new View({
-                        el: $('<div/>').appendTo($('body')),
-                        router: router,
-                        project: project,
-                        query: query,
-                        offset: offset
-                    });
-                    router.view.render();
+
+                return View.extend({
+                    viewTypeName: moduleName,
+                    initialize: function () {
+                        console.log(this.viewTypeName);
+                        var view = this,
+                            args = [].slice.call(arguments, 0),
+                            viewModel = ViewModel ? new ViewModel(this.options, {
+                            }) : null,
+                            subViews = [];
+
+                        _.each(initMethods, function (func) {
+                            subViews.push(func.apply(view, [viewModel]));
+                        });
+                        this.viewModel = viewModel;
+
+                        View.prototype.initialize.apply(view, args);
+
+                        this.bindView(this.viewModel);
+                    }
                 });
+            });
+    
+            return moduleName;
+        },
+        createView: function (moduleName, args) {
+            var opts = _.extend({
+                }, args),
+                res = $.Deferred();
+
+            require([moduleName], function (View) {
+                var view = new View(opts);
+
+                res.resolve(view);
+            });
+
+            return res.promise();
+        },
+        showRedmineInternal: function (project, query, offset) {
+            var router = this,
+                $el = $('<div/>'),
+                $body = $('body');
+
+            this.buildMetadata($body)
+            .then(function (moduleName, deps, extra, typeDeps, ViewModel) {
+
+                return router.defineModule(moduleName, deps, extra, typeDeps, ViewModel);
+
+            }).then(function (moduleName) {
+                return router.createView(moduleName, {
+                    el: $el,
+                    router: router,
+                    project: project,
+                    query: query,
+                    offset: offset
+                });
+            }).then(function (view) {
+                $body.empty();
+
+                view.render();
+
+                $el.appendTo($('body'));
             });
         }
     });
