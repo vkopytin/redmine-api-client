@@ -38,7 +38,7 @@ define(function (require) {
                 templatePath = $el.data('template');
 
             require([templatePath, viewModelType], function (tplText, ViewModel) {
-                var template = $T.compile(tplText),
+                var template = $T.compile(tplText || ''),
                     meta = $(template.render()),
                     deps = [typePath],
                     templates = [],
@@ -122,7 +122,8 @@ define(function (require) {
                         var view = this,
                             args = [].slice.call(arguments, 0),
                             viewModel = ViewModel ? new ViewModel(this.options, {
-                                router: this.options.router
+                                router: this.options.router,
+                                viewModel: this.options.viewModel
                             }) : this.options.viewModel,
                             subViews = [];
 
@@ -134,6 +135,11 @@ define(function (require) {
                         View.prototype.initialize.apply(view, args);
 
                         this.bindView(this.viewModel);
+                    },
+                    render: function () {
+                        var res = View.prototype.render.apply(this, arguments);
+
+                        return res;
                     }
                 });
             });

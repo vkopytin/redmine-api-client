@@ -1,10 +1,7 @@
 define(function (require) {
     var _ = require('underscore'),
         BB = require('backbone'),
-        ProjectsCollection = require('collections/redmine/projects'),
-        QueriesCollection = require('collections/redmine/queries'),
-        IssuesCollection = require('collections/redmine/issues'),
-        SelectionList = require('views/selectionlist');
+        Service = require('service');
 
     return BB.Model.extend({
         defaults: {
@@ -13,11 +10,11 @@ define(function (require) {
         },
         initialize: function (fields, options) {
             this.router = options.router;
-            this.projects = new ProjectsCollection();
-            this.queries = new QueriesCollection();
-            this.issues = new IssuesCollection([], {
-                project: this.get('project')
-            });
+            this.projects = Service.getEntity('Projects'),
+            this.queries = Service.getEntity('Queries'),
+            this.issues = Service.getEntity('Issues');
+
+            this.issues.setProject(this.get('project'));
 
             this.projects.on('sync', this.setProjects, this);
             this.queries.on('sync', this.setQueries, this);
@@ -51,23 +48,15 @@ define(function (require) {
             var project = this.get('project'),
                 query = this.get('query'),
                 data = {
-                    key: '480190b02690dc9b3ac2a2e68ae34c13961d1b88',
                     limit: this.get('limit'),
-                    include: 'journals',
-                    project_id: project
+                    include: 'journals'
                 };
 
-            if (query) {
-                data.query_id = query;
-            }
             if (this.get('offset')) {
                 data.offset = this.get('offset');
             }
-            return this.issues.fetch({
-                //remove: !this.get('offset'),
-                data: data,
-                xheaders: {'Authorization': 'Y2hlOmd1ZXZhcmEyMDEyIQ=='}
-            });
+
+            return this.issues.getIssues(project, query, data);
         },
         getIssues: function () {
             this.set('loading', true);
@@ -76,7 +65,7 @@ define(function (require) {
             }, this));
         },
         nextPage: function () {
-            this.set('offset', this.get('offset') + this.get('limit'));
+            this.set('offset', +this.get('offset') + this.get('limit'));
             this.getIssues();
         },
         requestData: function () {

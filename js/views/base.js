@@ -26,6 +26,9 @@ define(function (require) {
                 }, this);
             }, this);
         },
+        set: function () {
+            console.log(arguments);
+        },
         getApp: function() {
             return this.app;
         },

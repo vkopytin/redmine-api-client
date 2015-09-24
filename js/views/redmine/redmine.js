@@ -18,9 +18,15 @@ define(function (require) {
         statusOrder: [
             "review", "feedback", "tested","new","suspended",
             "ready to deploy",
-            "in progress",
+            "in progress", "in progress of testing",
             "ready for design testing","ready for testing","resolved","live"
         ],
+        groups: {
+            toDo: ["feedback on live", "review", "feedback", "tested","new","suspended"],
+            inProgress: ["in progress of testing", "in progress"],
+            toDeploy: ["ready to deploy"],
+            done: ["ready for design testing","ready for testing","resolved","live", "ready to test on live"]
+        },
         rowTemplate: $T.compile('<tr class="fixed_version" data-id="{{fixed_version.id}}">\
     <td colspan="4" style="border-left: 2px solid gray;border-top: 1px solid silver;text-align:center;"><a href="https://redmine.rebelmouse.com/versions/{{fixed_version.id}}">{{fixed_version.name}}</a></td>\
     </tr><tr class="fixed_version" data-id="{{fixed_version.id}}" id="{{fixed_version.id}}">\
@@ -65,13 +71,13 @@ define(function (require) {
                 this.$('.issues-table').append($fixedVersion);
             }
 
-            if ($.inArray(status.name.toLowerCase(), ["feedback on live", "review", "feedback", "tested","new","suspended"]) >= 0) {
+            if ($.inArray(status.name.toLowerCase(), this.groups.toDo) >= 0) {
                 this.$('#'+fixed_version.id+' .to-do').append(item.el);
-            } else if ($.inArray(status.name.toLowerCase(), ["in progress"]) >= 0) {
+            } else if ($.inArray(status.name.toLowerCase(), this.groups.inProgress) >= 0) {
                 this.$('#'+fixed_version.id+' .in-progress').append(item.el);
-            } else if ($.inArray(status.name.toLowerCase(), ["ready to deploy"]) >= 0) {
+            } else if ($.inArray(status.name.toLowerCase(), this.groups.toDeploy) >= 0) {
                 this.$('#'+fixed_version.id+' .to-deploy').append(item.el);
-            } else if ($.inArray(status.name.toLowerCase(), ["ready for design testing","ready for testing","resolved","live", "ready to test on live"]) >= 0) {
+            } else if ($.inArray(status.name.toLowerCase(), this.groups.done) >= 0) {
                 this.$('#'+fixed_version.id+' .done').append(item.el);
             } else {
                 console.log('Unexpected status: '+ status.name);
