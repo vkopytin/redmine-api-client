@@ -8,13 +8,20 @@ define(function (require) {
         return BaseView.extend({
             events: {
                 'click .show-description': 'toggleDescription',
-                'click .show-comments': 'showComments'
+                'click .show-comments': 'showComments',
+                'click': 'clickHandler'
             },
             initialize: function (options) {
                 this.template = options.template;
                 BaseView.prototype.initialize.apply(this, arguments);
                 this.model.on('change', this.render, this);
                 this.model.on('remove', this.remove, this);
+            },
+            clickHandler: function (evnt) {
+                this.options.onChangeSelected && this.options.onChangeSelected(this, this.model.get('id'));
+            },
+            select: function (value) {
+                this.$('.rm-issue').toggleClass('issue-selected', value);
             },
             toggleDescription: function (evnt) {
                 evnt && evnt.preventDefault();

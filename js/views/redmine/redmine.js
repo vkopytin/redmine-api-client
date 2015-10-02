@@ -27,13 +27,13 @@ define(function (require) {
             toDeploy: ["ready to deploy"],
             done: ["ready for design testing","ready for testing","resolved","live", "ready to test on live"]
         },
-        rowTemplate: $T.compile('<tr class="fixed_version" data-id="{{fixed_version.id}}">\
-    <td colspan="4" style="border-left: 2px solid gray;border-top: 1px solid silver;text-align:center;"><a href="https://redmine.rebelmouse.com/versions/{{fixed_version.id}}">{{fixed_version.name}}</a></td>\
-    </tr><tr class="fixed_version" data-id="{{fixed_version.id}}" id="{{fixed_version.id}}">\
-    <td class="to-do sorting" valign="top" style="border-top: 1px solid silver;"></td>\
-    <td class="in-progress sorting" valign="top" style="border-top: 1px solid silver;"></td>\
-    <td class="to-deploy sorting" valign="top" style="border-top: 1px solid silver;"></td>\
-    <td class="done sorting" valign="top" style="border-top: 1px solid silver;"></td></tr>'),
+        rowTemplate: $T.compile('<ul class="fixed_version" data-id="{{fixed_version.id}}">\
+    <li colspan="4" style="text-align:center;background-coloe: #efefef;display:none;"><a href="https://redmine.rebelmouse.com/versions/{{fixed_version.id}}">{{fixed_version.name}}</a></li>\
+    </ul><ul class="fixed_version" data-id="{{fixed_version.id}}" id="{{fixed_version.id}}">\
+    <li class="to-do sorting" valign="top" style="border-top: 1px solid silver;"></li>\
+    <li class="in-progress sorting" valign="top" style="border-top: 1px solid silver;"></li>\
+    <li class="to-deploy sorting" valign="top" style="border-top: 1px solid silver;"></li>\
+    <li class="done sorting" valign="top" style="border-top: 1px solid silver;"></li></ul>'),
         initialize: function (options) {
             this.template = options.template;
             this.issues = new IssuesCollection([], {
@@ -51,6 +51,13 @@ define(function (require) {
                     this.setSource(value);
             }
         },
+        onChangeSelected: function (viewItem, id) {
+            if (this.selectedView) {
+                this.selectedView.select(false);
+            }
+            viewItem.select(true);
+            this.selectedView = viewItem;
+        },
         drawItem: function (model) {
             var el = $('<div/>'),
                 statusOrder = this.statusOrder,
@@ -60,7 +67,8 @@ define(function (require) {
                     className: model.get('id'),
                     el: el,
                     model: model,
-                    template: $T.compile(this.$('#item-template').html())
+                    template: $T.compile(this.$('#item-template').html()),
+                    onChangeSelected: _.bind(this.onChangeSelected, this)
                 }),
                 $fixed_version;
             item.render();

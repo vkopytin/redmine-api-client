@@ -17,7 +17,7 @@ define(function (require) {
             this.app = options.app;
         },
         showRedmine: function () {
-            this.showRedmineInternal('rebelmouse', '', '');
+            this.showRedmineInternal('all', '', '');
         },
         showRedmineByProject: function (project) {
             this.showRedmineInternal(project, '', '');
@@ -138,7 +138,13 @@ define(function (require) {
                                 template: $T.compile(template),
                                 el: el
                             }),
-                            view = new View(viewOpts),
+                            view = (function () {
+                                var inst = new View(viewOpts);
+                                    if (propName) {
+                                        pView[propName] = inst;
+                                    }
+                                return inst;
+                            })(),
                             res = view.render(),
                             childRes = renderChildren(viewInit.items, view.$el);
 

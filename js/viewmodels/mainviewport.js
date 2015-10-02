@@ -25,7 +25,8 @@ define(function (require) {
         changeProject: function (model, project) {
             this.set('offset', 0);
             var url = _.compact(['/redmine', project, this.get('query')]).join('/');
-            Backbone.history.navigate(url, {trigger: true});
+            Backbone.history.navigate(url, {trigger: false});
+            this.getIssues();
         },
         changeQuery: function (model, query) {
             this.set('offset', 0);

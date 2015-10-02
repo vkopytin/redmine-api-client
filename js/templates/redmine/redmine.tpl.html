@@ -1,39 +1,62 @@
 {{=<< >>=}}
 <script type="text/template" id="item-template">
-        <div data-sort-priority="{{priority.id}}" data-sort-date="{{updated_on}}" data-sort-status="{{statusLower}}" style="margin: 2px;border-left: 4px solid gray;border-right: 2px solid gray;border-top: 2px solid gray;border-bottom: 2px solid gray;border-radius: 5px;border-left-color:{{color_priority}};">
-  <div style="background-color: lightBlue;border-top-left-radius:2px;border-top-right-radius:2px;">
-    <div style="padding: 2px 5px;font-align:center;font-size:x-small;">
-      <span>{{priority.name}}</span>/<span>{{tracker.name}}</span>:<span style="margin: 5px;font-size:x-small;font-weight: bold;"><a style="font-size:x-small;" href="https://redmine.rebelmouse.com/issues/{{id}}" target="_blank">{{id}}</a></span>
-      <span style="float:right;padding:0px 5px;">{{status.name}}</span>
+<div class="rm-issue{{#selected}} issue-selected{{/selected}}" data-sort-priority="{{priority.id}}" data-sort-date="{{updated_on}}" data-sort-status="{{statusLower}}">
+          <div style="font-size:x-small;background-color: #f9f9f9;margin: 0px 2px;">
+            <span>&nbsp;
+              <a href="https://redmine.rebelmouse.com/versions/{{fixed_version.id}}">{{fixed_version.name}}</a>
+            </span>
+            <span style="float: right;">{{project.name}}</span>
+          </div>
+
+  <div class="issue-content">
+    <div class="issue-fields">
+        <div class="xissue-key" style="font-align:center;font-size:x-small;">
+          <span>{{priority.name}}</span>/<span>{{tracker.name}}</span>:&nbsp;<span style="font-size:x-small;font-weight: bold;"><a style="font-size:x-small;" href="https://redmine.rebelmouse.com/issues/{{id}}" target="_blank">{{id}}</a></span>
+          <span style="float:right;">{{status.name}}</span>
+        </div>
+
+        <div class="issue-summary">
+          <a href="https://redmine.rebelmouse.com/issues/{{id}}">{{id}} - {{subject}}</a>
+        </div>
+
+
     </div>
-  </div>
-  <div style="font-size:x-small;background-color: silver;padding: 6px 3px;">
-    <div><a href="https://redmine.rebelmouse.com/versions/{{fixed_version.id}}">{{fixed_version.name}}</a></div>
-  </div>
-  <div style="font-size:x-small;margin: 6px 3px;">
-    <a href="https://redmine.rebelmouse.com/issues/{{id}}">{{id}} - {{subject}}</a>
-    <div class="show-description" style="float:right;"><button style="padding:2px;">⌄</button></div>
   </div>
   <div class="description hidden">
-  <div style="font-size: xx-small; margin: 5px;white-space: pre-wrap;">{{description}}</div>
+  <div style="font-size: xx-small; margin: 0px 0px 0px 3px;white-space: pre-wrap;overflow:auto;background: #fff;">{{description}}</div>
   </div>
-  <div class="comments-list hidden" style="font-size: xx-small; margin: 5px;white-space: pre-wrap;overflow-y: auto;height: 240px;">
+  <div class="comments-list hidden" style="background: #fff;margin: 0px 0px 0px 3px;font-size: xx-small;white-space: pre-wrap;overflow-y: auto;height: 240px;">
     <div style="font-size: xx-small;text-align:center;"><a class="show-comments" href="javascript: void(0);">Comments</a></div>
     {{#journals}}
-    <div style="background-color: silver;">{{user.name}} - {{created_on}}</div>
-    <div style="border-bottom: 1px solid gray;">{{notes}}</div>
+    <div style="background-color: #eee;">{{user.name}} - {{created_on}}</div>
+    <div style="border-bottom: 1px solid #eee;">{{notes}}</div>
     {{/journals}}
   </div>
-  <div style="font-size: xx-small;text-align:center;"><a class="show-comments" href="javascript: void(0);">Comments</a></div>
-  <div style="font-size:x-small;padding:2px 5px;background-color: silver;border-bottom-left-radius:2px;border-bottom-right-radius:2px;">
-    <div style="float:left;font-size:x-small;"><input style="border: 0px;background-color:transparent;" type="text" value="{{for_git}}"/></div>
-    <div>
-      <span>&nbsp;</span><span style="float:right;">{{updated_on}}</span>
-    </div>
-    <div style="text-align:right;">
-      <span>&nbsp;</span><span><a href="https://redmine.rebelmouse.com/users/{{assigned_to.id}}" class="user active">{{assigned_to.name}}</a></span>
+  <div class="issue-content">
+
+        <div style="font-size:x-small;background-color: #f9f9f9;overflow:auto;">
+          <div style="float:left;font-size:x-small;">
+            <pre style="margin:0;padding:0;">{{for_git}}</pre>
+          </div>
+          <div>
+            <span>&nbsp;</span><span style="float:right;">{{updated_on}}</span>
+          </div>
+        </div>
+  </div>
+          <div style="position: absolute;bottom: 0;left: 0;right: 0;padding: 0;margin: 0px 10px;">
+            <span>&nbsp;</span><span><a href="https://redmine.rebelmouse.com/users/{{assigned_to.id}}" class="user active">{{assigned_to.name}}</a></span>
+          </div>
+  <div class="issue-end">
+    <div class="issue-corner">
+      <span class="issue-badge show-comments" title="Unestimated">CO</span>
     </div>
   </div>
+  <div class="issue-flags">
+    <span class="issue-description show-description" title="Description">
+      <button style="padding:2px;">⌄</button>
+    </span>
+  </div>
+  <div class="rm-grabber" style="background-color:{{color_priority}};"></div>
 </div>
 </script>
 <<={{ }}=>>
@@ -44,15 +67,11 @@
   </div>
   <div><button class="load-more">Load more</button></div>
 </div>
-  <table class="issues-table">
-    <col width="30%"/>
-    <col width="25%"/>
-    <col width="20%"/>
-    <col width="25%"/>
-    <tr>
-      <th class="to-do">to do</th>
-      <th class="in-progress">in progress</th>
-      <th class="to-deploy">to deploy</th>
-      <th class="done">done</th>
-    </tr>
-  </table>
+  <div class="issues-table">
+    <ul class="issues-header">
+      <li class="to-do">to do</li>
+      <li class="in-progress">in progress</li>
+      <li class="to-deploy">to deploy</li>
+      <li class="done">done</li>
+    </ul>
+  </div>

@@ -39,10 +39,9 @@ define(function (require) {
             var data = this.opts.data || {},
                 project = project || this.project,
                 data = _.extend({
-                    subproject_id: '*'
                 }, data, opts);
 
-            if (project) {
+            if (project && project !== 'all') {
                 data.project_id = project;
             }
 

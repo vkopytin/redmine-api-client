@@ -4,7 +4,11 @@ define(function (require) {
     return BB.Collection.extend({
         url: 'https://che:guevara2012!@redmine.rebelmouse.com/projects.json',
         parse: function (data) {
-            return data.projects;
+            return [{
+                id: 0,
+                name: 'all',
+                identifier: 'all'
+            }].concat(data.projects);
         }
     });
 });
