@@ -24,6 +24,7 @@ define(function (require) {
             });
 
             this.dropdown.on('change:item', this.changeProject, this);
+            this.bindView(this.viewModel);
         },
         set: function (name, value) {
             switch (name) {
@@ -54,10 +55,12 @@ define(function (require) {
             this.selectedId = this.options.project;
         },
         render: function () {
+            var res = $.Deferred(),
+                subRes = this.dropdown.setElement(this.$('.projects')).render();
 
-            this.dropdown.setElement(this.$('.projects')).render();
+            res.resolve(this);
 
-            return this;
+            return $.when(res.promise(), subRes);
         }
     });
 });

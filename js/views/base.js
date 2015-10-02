@@ -5,7 +5,8 @@ define(function (require) {
 
     return BB.View.extend({
         constructor: function (options) {
-            this.options = options || {};
+            this.options = _.extend({}, options || {});
+            options.viewModel && (this.viewModel = options.viewModel);
             BB.View.apply(this, arguments);
         },
         initialize: function (options) {

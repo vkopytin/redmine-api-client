@@ -1,13 +1,13 @@
 define(function (require) {
     var _ = require('underscore'),
-        BB = require('backbone'),
-        Service = require('service');
+        BB = require('backbone');
 
     return BB.Model.extend({
         defaults: {
             search: ''
         },
-        initialize: function () {
+        initialize: function (fields, options) {
+            var Service = options.service;
             this.issues = Service.getEntity('Issues');
             this.on('change:search', this.changeSearch, this);
         },

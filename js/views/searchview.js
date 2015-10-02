@@ -7,7 +7,8 @@ define(function (require) {
             'keyup .search-input': 'searchInputHandler'
         },
         initialize: function () {
-            return BaseView.prototype.initialize.apply(this, arguments);
+            BaseView.prototype.initialize.apply(this, arguments);
+            this.bindView(this.viewModel);
         },
         get: function (name) {
             switch (name) {
@@ -28,6 +29,10 @@ define(function (require) {
             var text = this.$(evnt.currentTarget).val();
 
             this.trigger('change:search', text);
-        }, 500)
+        }, 500),
+        render: function () {
+
+            return this;
+        }
     });
 });

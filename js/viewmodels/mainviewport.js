@@ -1,7 +1,6 @@
 define(function (require) {
     var _ = require('underscore'),
-        BB = require('backbone'),
-        Service = require('service');
+        BB = require('backbone');
 
     return BB.Model.extend({
         defaults: {
@@ -9,7 +8,7 @@ define(function (require) {
             limit: 100
         },
         initialize: function (fields, options) {
-            this.router = options.router;
+            var Service = options.service;
             this.projects = Service.getEntity('Projects'),
             this.queries = Service.getEntity('Queries'),
             this.issues = Service.getEntity('Issues');
@@ -26,12 +25,12 @@ define(function (require) {
         changeProject: function (model, project) {
             this.set('offset', 0);
             var url = _.compact(['/redmine', project, this.get('query')]).join('/');
-            this.router.navigate(url, {trigger: true});
+            Backbone.history.navigate(url, {trigger: true});
         },
         changeQuery: function (model, query) {
             this.set('offset', 0);
             var url = _.compact(['/redmine', this.get('project'), query]).join('/');
-            this.router.navigate(url, {trigger: false});
+            Backbone.history.navigate(url, {trigger: false});
             this.getIssues();
         },
         setProjects: function (collection) {

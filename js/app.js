@@ -3,6 +3,7 @@ define(function (require) {
         _ = require('underscore'),
         BB = require('backbone'),
         MainRouter = require('mainrouter'),
+        Service = require('service'),
         c,
         app;
 
@@ -11,6 +12,9 @@ define(function (require) {
             c = cc;
             this.bindEvents();
             c || this.receivedEvent('deviceready');
+        },
+        getService: function () {
+            return Service;
         },
         // Bind Event Listeners
         //

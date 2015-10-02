@@ -39,6 +39,8 @@ define(function (require) {
             BaseView.prototype.initialize.apply(this, arguments);
             this.collection.on('add', this.drawItem, this);
             this.collection.on('change:selected', this.changeItem, this);
+
+            this.bindView(this.viewModel);
         },
         createItemView: function (options) {
             return new (this.options.ItemView || this.ItemView)(options);
@@ -83,10 +85,13 @@ define(function (require) {
             this.selectedModel = this.collection.get(this.options.query);
         },
         render: function () {
+            var res = $.Deferred();
             var html = this.template.render({});
             this.$el.html(html);
-            
-            return this;
+
+            res.resolve(this);
+
+            return res.promise();
         }
     });
 });

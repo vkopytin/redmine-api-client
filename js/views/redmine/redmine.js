@@ -42,6 +42,8 @@ define(function (require) {
             BaseView.prototype.initialize.apply(this, arguments);
 
             this.issues.on('add', this.drawItem, this);
+
+            this.bindView(this.viewModel);
         },
         set: function (name, value) {
             switch (name) {
@@ -125,8 +127,6 @@ define(function (require) {
         },
         loadChildren: function (finish) {
         },
-        renderChildren: function () {
-        },
         renderTemplate: function () {
             var html = this.template.render({});
 
@@ -139,13 +139,12 @@ define(function (require) {
             });
         },
         render: function () {
-            var view = this.renderTemplate();
+            var view = this.renderTemplate(),
+                res = $.Deferred();
 
-            this.loadChildren(function (view) {
-                view.render();
-            });
+            res.resolve(this);
 
-            return this;
+            return res.promise();
         }
     });
 });

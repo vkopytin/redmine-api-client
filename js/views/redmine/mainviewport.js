@@ -7,7 +7,12 @@ define(function (require) {
         template = require('text!templates/redmine/mainviewport.tpl.html'),
         ViewModel = require('viewmodels/mainviewport'),
         ProjectsView = require('views/redmine/projects'),
-        SelectionList = require('views/selectionlist');
+        SelectionList = require('views/selectionlist'),
+        RedmineView = require('views/redmine/redmine'),
+        redmineTemplate = require('text!templates/redmine/redmine.tpl.html'),
+        SearchView = require('views/searchview'),
+        SearchViewModel = require('viewmodels/search'),
+        IssuesViewModel = require('viewmodels/issues');
 
     return ViewPort.extend({
         events: {
@@ -16,7 +21,11 @@ define(function (require) {
         },
         template: $T.compile(template),
         initialize: function (options) {
+            this.viewModel = options.viewModel;
+
             ViewPort.prototype.initialize.apply(this, arguments);
+
+            this.bindView(this.viewModel);
         },
         set: function (name, value) {
             switch (name) {
@@ -41,21 +50,15 @@ define(function (require) {
             this.$('.loading').toggleClass('hidden', !show);
         },
         render: function () {
+            var res = $.Deferred();
+
             ViewPort.prototype.render.apply(this, arguments);
 
-            this.projects
-                .setElement(this.$('.projects-selector'))
-                .render();
-
-            this.queries
-                .setElement(this.$('.queries'))
-                .render();
-
-            this.viewContainer
-                .setElement(this.$('.container'))
-                .render();
-
             _.defer(_.bind(this.getIssues, this), 60);
+
+            res.resolve(this);
+
+            return res.promise();
         }
     });
 });

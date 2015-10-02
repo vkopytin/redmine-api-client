@@ -1,11 +1,11 @@
 define(function (require) {
     var _ = require('underscore'),
         BB = require('backbone'),
-        Service = require('service'),
         BaseViewModel = require('viewmodels/mainviewport');
 
     return BaseViewModel.extend({
         initialize: function (fields, options) {
+            var Service = options.service;
             this.issues = Service.getEntity('Issues');
 
             this.issues.on('sync', this.setIssues, this);

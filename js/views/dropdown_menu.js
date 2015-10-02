@@ -39,10 +39,14 @@ define(function (require) {
             this.$el.append(item.render().el);
         },
         render: function () {
-            var html = this.template.render();
+            var html = this.template.render(),
+                res = $.Deferred();
+
             this.$el.html(html);
 
-            return this;
+            res.resolve(this);
+
+            return res.promise();
         }
     });
 });
