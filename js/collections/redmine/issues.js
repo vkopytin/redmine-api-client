@@ -6,7 +6,7 @@ define(function (require) {
     return BB.Collection.extend({
         model: Model,
         url: function () {
-            return ['https://che:guevara2012!@redmine.rebelmouse.com/issues.json'].join('/');
+            return [localStorage.getItem('redminePath') + '/issues.json'].join('/');
         },
         initialize: function (items, opts) {
             this.opts = opts;
@@ -50,6 +50,8 @@ define(function (require) {
             }
 
             this.fetchOpts = {
+                //username: 'che',
+                //password: 'guevara',
                 remove: !data.offset,
                 data: data
             };

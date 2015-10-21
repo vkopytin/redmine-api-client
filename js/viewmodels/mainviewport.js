@@ -21,6 +21,10 @@ define(function (require) {
 
             this.on('change:project', this.changeProject, this);
             this.on('change:query', this.changeQuery, this);
+
+            this.setProjects(new BB.Collection());
+            this.setQueries(new BB.Collection());
+            this.setIssues(new BB.Collection());
         },
         changeProject: function (model, project) {
             this.set('offset', 0);
@@ -36,12 +40,18 @@ define(function (require) {
         },
         setProjects: function (collection) {
             this.set('projects', collection.toJSON());
+            this.trigger('change:projects', this);
         },
         setQueries: function (collection) {
             this.set('queries', collection.toJSON());
+            this.trigger('change:queries', this);
         },
         setIssues: function (collection) {
+            if (collection instanceof BB.Model) {
+                return false;
+            }
             this.set('issues', collection.toJSON());
+            this.trigger('change:issues', this);
             this.set('totalCount', collection.totalCount);
         },
         getIssuesInternal: function () {
@@ -73,12 +83,12 @@ define(function (require) {
             $.when(
                 this.projects.fetch({
                     data: {
-                        key: '480190b02690dc9b3ac2a2e68ae34c13961d1b88'
+                        key: localStorage.getItem('rm-key')
                     }
                 }),
                 this.queries.fetch({
                     data: {
-                        key: '480190b02690dc9b3ac2a2e68ae34c13961d1b88'
+                        key: localStorage.getItem('rm-key')
                     }
                 }),
                 this.getIssuesInternal()

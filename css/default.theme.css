@@ -39,7 +39,7 @@ body {
     margin: 0;
     table-layout: fixed;
     width: 100%;
-    padding: 0;
+    padding: 0 0 2px 0;
 }
 
 .issues-header li,

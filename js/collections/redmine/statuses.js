@@ -6,13 +6,27 @@ define(function (require) {
     return BB.Collection.extend({
         model: Model,
         url: function () {
-            return ['https://che:guevara2012!@redmine.rebelmouse.com/issue_statuses.json'].join('/');
+            return [localStorage.getItem('redminePath') + '/issue_statuses.json'].join('/');
         },
         initialize: function (items, opts) {
             this.opts = opts;
         },
         parse: function (data) {
             return data.issue_statuses;
+        },
+        getStatuses: function () {
+            var res = $.Deferred();
+
+            this.fetch({
+                data: {
+                    key: this.opts.key
+                },
+                success: function (collection) {
+                    res.resolve(collection);
+                }
+            });
+
+            return res.promise();
         }
     });
 });

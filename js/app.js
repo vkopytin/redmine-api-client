@@ -7,6 +7,19 @@ define(function (require) {
         c,
         app;
 
+//$.support.cors = true;
+$.ajaxSetup({
+  beforeSend: function(xhr, options){
+    //options.xhrFields = {withCredentials: true};
+    //options.crossDomain = {crossDomain: true};
+    //var url = options.url;
+    //options.url = url.split('//').join('//che:guevara2012!@');
+    //options.username = localStorage.getItem('username');
+    //options.password = localStorage.getItem('password');
+    xhr.setRequestHeader("Authorization", "Basic " + btoa(localStorage.getItem('username') + ":" + localStorage.getItem('password')));
+  }
+});
+
     return app = {
         initialize: function (cc) {
             c = cc;

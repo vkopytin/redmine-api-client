@@ -20,10 +20,14 @@ define(function (require) {
                 var key = key,
                     value = value;
                 this.on('change:' + value, function () {
-                    viewModel.set(key, this.get(value));
+                    _.defer(function (view) {
+                        viewModel.set(key, view.get(value));
+                    }, this);
                 }, this);
                 viewModel.on('change:' + key, function () {
-                    this.set(value, viewModel.get(key));
+                    _.defer(function (view) {
+                        view.set(value, viewModel.get(key));
+                    }, this);
                 }, this);
             }, this);
         },

@@ -17,7 +17,8 @@ define(function (require) {
     return ViewPort.extend({
         events: {
             'click .get-issues': 'getIssues',
-            'click .load-more': 'loadMore'
+            'click .load-more': 'loadMore',
+            'click .redmine-view-close': 'closeRedmineView'
         },
         template: $T.compile(template),
         initialize: function (options) {
@@ -38,6 +39,9 @@ define(function (require) {
                 case 'issuesLoaded':
                     this.$('.issues-loaded').text(value.length);
                     break;
+                case 'activateRedmine':
+                    this.activateRedmine(value);
+                    break;
             }
         },
         getIssues: function () {
@@ -48,6 +52,23 @@ define(function (require) {
         },
         showLoadingOverlay: function (show) {
             this.$('.loading').toggleClass('hidden', !show);
+        },
+        activateRedmine: function (issueId) {
+            var rmUrl = //localStorage.getItem('redminePath')
+                'https://redmine.rebelmouse.com' + '/issues/' + issueId,
+                redmineView = this.$('.redmine-view')
+                .toggleClass('hidden', false),
+                width = redmineView.width(),
+                height = redmineView.height();
+            this.$('.redmine-view iframe')
+                .attr('src', rmUrl)
+                .width(width * 4/3)
+                .height(height * 4/3)
+                .css('margin', '-' + (-20 + height/4.5) + 'px 0 0 -' + (width/6) + 'px');
+        },
+        closeRedmineView: function (evnt) {
+            this.$('.redmine-view')
+                .toggleClass('hidden', true);
         },
         render: function () {
             var res = $.Deferred();

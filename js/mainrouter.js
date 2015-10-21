@@ -4,6 +4,18 @@ define(function (require) {
         BB = require('backbone'),
         $T = require('hogan');
 
+    function requireAsync(path) {
+        var res = $.Deferred();
+
+        require([path], function (Type) {
+            res.resolve(Type);
+        }, function (err) {
+            res.reject(err);
+        });
+
+        return res.promise();
+    }
+
     return BB.Router.extend({
         routes: {
             'redmine': 'showRedmine',
@@ -11,11 +23,55 @@ define(function (require) {
             'redmine/:project/:query': 'showRedmineByProjectAndQuery',
             'redmine/:project?offset=:offset': 'showRedmineByProjectAndOffset',
             'redmine/:project/:query?offset=:offset': 'showRedmineByProjectAndQueryAndOffset',
+            'options': 'showOptions',
             '*action': 'showRedmine'
         },
         initialize: function (options) {
             this.app = options.app;
         },
+        renderChildren: function (items, pView) {
+            var context = this,
+                app = this.app,
+                service = app.getService(),
+                resAll;
+            _.each(items, function (viewInit) {
+                var type = viewInit.type,
+                    tpl = viewInit.template,
+                    options = viewInit.options,
+                    el = viewInit.el,
+                    viewModelPath = viewInit.viewModel,
+                    propName = viewInit.name;
+
+                $.when(
+                    requireAsync(type),
+                    requireAsync(tpl),
+                    service.resolveEntity(viewModelPath, options))
+                .then(function (View, template, viewModel) {
+                    var viewOpts = _.extend({}, options, {
+                            'parent': pView,
+                            viewModel: viewModel,
+                            app: app,
+                            service: service,
+                            template: $T.compile(template),
+                            el: el
+                        }),
+                        view = (function () {
+                            var inst = new View(viewOpts);
+                                if (propName) {
+                                    pView[propName] = inst;
+                                }
+                            return inst;
+                        })(),
+                        res = view.render(),
+                        childRes = context.renderChildren(viewInit.items, view.$el);
+
+                    resAll = $.when(resAll, res, childRes);
+                });
+            });
+
+            return resAll;
+        },
+
         showRedmine: function () {
             this.showRedmineInternal('all', '', '');
         },
@@ -51,7 +107,8 @@ define(function (require) {
                     bind: {
                         issuesLoaded: 'issues',
                         showLoadingOverlay: 'loading',
-                        totalCount: 'totalCount'
+                        totalCount: 'totalCount',
+                        activateRedmine: 'activateRedmine'
                     }
                 },
                 items: [{
@@ -97,65 +154,39 @@ define(function (require) {
                     name: 'container',
                     options: {
                         bind: {
-                            source: 'issues'
+                            source: 'issues',
+                            refreshIssue: 'refreshIssue'
                         }
                     }
                 }]
             }];
 
-            function requireAsync(path) {
-                var res = $.Deferred();
+            $.when(this.renderChildren(mainViewportJml, this)).then(function () {
+                console.log(['rendered: ', arguments]);
+            });;
+        },
 
-                require([path], function (Type) {
-                    res.resolve(Type);
-                }, function (err) {
-                    res.reject(err);
-                });
+        showOptions: function () {
+            var router = this,
+                $el = $('.mainview'),
+                app = this.app;
 
-                return res.promise();
-            }
+            var mainViewportJml = [{
+                type: 'views/redmine/options',
+                template: 'text!templates/redmine/options.tpl.html',
+                viewModel: 'viewmodels/options',
+                el: '.mainview',
+                name: 'mainview',
+                options: {
+                    router: router,
+                    app: app,
+                    bind: {
+                    }
+                },
+                items: []
+            }];
 
-            function renderChildren(items, pView) {
-                var service = app.getService(),
-                    resAll;
-                _.each(items, function (viewInit) {
-                    var type = viewInit.type,
-                        tpl = viewInit.template,
-                        options = viewInit.options,
-                        el = viewInit.el,
-                        viewModelPath = viewInit.viewModel,
-                        propName = viewInit.name;
-
-                    $.when(
-                        requireAsync(type),
-                        requireAsync(tpl),
-                        service.resolveEntity(viewModelPath, options))
-                    .then(function (View, template, viewModel) {
-                        var viewOpts = _.extend({}, options, {
-                                'parent': pView,
-                                viewModel: viewModel,
-                                service: service,
-                                template: $T.compile(template),
-                                el: el
-                            }),
-                            view = (function () {
-                                var inst = new View(viewOpts);
-                                    if (propName) {
-                                        pView[propName] = inst;
-                                    }
-                                return inst;
-                            })(),
-                            res = view.render(),
-                            childRes = renderChildren(viewInit.items, view.$el);
-
-                        resAll = $.when(resAll, res, childRes);
-                    });
-                });
-
-                return resAll;
-            }
-
-            $.when(renderChildren(mainViewportJml, this)).then(function () {
+            $.when(this.renderChildren(mainViewportJml, this)).then(function () {
                 console.log(['rendered: ', arguments]);
             });;
         }

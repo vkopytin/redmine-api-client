@@ -30,9 +30,11 @@ define(function (require) {
                 }
 
                 inProgress[path] = res;
-                require([path], function (Entity) {
-                    var inst = entities[path] = new Entity(options, _.extend(options, {
-                        service: srv
+                require([path, 'app'], function (Entity, app) {
+                    var inst = entities[path] = new Entity(options, _.extend(options|| {}, {
+                        service: srv,
+                        app: app,
+                        key: localStorage.getItem('rm-key')
                     }));
                     inProgress[path].resolve(inst);
                 });
@@ -46,7 +48,7 @@ define(function (require) {
                 if (!inst) {
                     inst = models[name] = new Type(null, {
                         data: {
-                            key: '480190b02690dc9b3ac2a2e68ae34c13961d1b88'
+                            key: localStorage.getItem('rm-key')
                         }
                     });
                 }
