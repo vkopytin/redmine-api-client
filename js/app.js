@@ -17,6 +17,7 @@ $.ajaxSetup({
     //options.username = localStorage.getItem('username');
     //options.password = localStorage.getItem('password');
     xhr.setRequestHeader("Authorization", "Basic " + btoa(localStorage.getItem('username') + ":" + localStorage.getItem('password')));
+    xhr.setRequestHeader("X-Redmine-API-Key", localStorage.getItem('rm-key'));
   }
 });
 
