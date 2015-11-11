@@ -1,0 +1,79 @@
+{{=<< >>=}}
+<script type="text/template" id="item-template">
+<div class="rm-issue{{#selected}} issue-selected{{/selected}}" data-sort-priority="{{priority.id}}" data-sort-date="{{updated_on}}" data-sort-status="{{statusLower}}" xdata-mix_priority="{{mix_priority}}" xdata-mix_date="{{mix_updated_on}}" xdata-mix_status="{{mix_status}}">
+          <div style="font-size:x-small;background-color: #f9f9f9;margin: 0px 2px;">
+            <span>&nbsp;
+              <a href="{{redminePath}}/versions/{{fixed_version.id}}">{{fixed_version.name}}</a>
+            </span>
+            <span style="float: right;">{{project.name}}</span>
+          </div>
+
+  <div class="issue-content">
+    <div class="issue-fields">
+        <div class="xissue-key" style="font-align:center;font-size:x-small;">
+          <span>{{priority.name}}</span>/<span>{{tracker.name}}</span>:&nbsp;<span style="font-size:x-small;font-weight: bold;"><a style="font-size:x-small;" href="{{redminePath}}/issues/{{id}}" target="_blank">{{id}}</a></span>
+          <span style="float:right;">{{status.name}}</span>
+        </div>
+
+        <div class="issue-summary">
+          <a href="{{redminePath}}/issues/{{id}}">{{id}} - {{subject}}</a>
+        </div>
+
+
+    </div>
+  </div>
+  <div class="description hidden">
+  <div style="font-size: xx-small; margin: 0px 0px 0px 3px;white-space: pre-wrap;overflow:auto;background: #fff;">{{description}}</div>
+  </div>
+  <div class="comments-list hidden" style="background: #fff;margin: 0px 0px 0px 3px;font-size: xx-small;">
+    <div style="font-size: xx-small;text-align:center;"><a class="show-comments" href="javascript: void(0);">Comments</a></div>
+    <div style="overflow-y: auto;white-space: pre-wrap;height: 240px;">
+    {{#journals}}
+    <div style="background-color: #eee;">{{user.name}} - {{created_on}}</div>
+    <div style="border-bottom: 1px solid #eee;">{{notes}}</div>
+    {{/journals}}
+    </div>
+  </div>
+  <div class="issue-content">
+
+        <div style="font-size:x-small;background-color: #f9f9f9;overflow:auto;">
+          <div class="git-branch" style="float:left;font-size:x-small;">
+            <pre style="margin:0;padding:0;">{{for_git}}</pre>
+          </div>
+          <div>
+            <span>&nbsp;</span><span style="float:right;">{{updated_on}}</span>
+          </div>
+        </div>
+  </div>
+          <div style="position: absolute;bottom: 0;left: 0;right: 0;padding: 0;margin: 0px 10px;">
+            <span>&nbsp;</span><span><a href="{{redminePath}}/users/{{assigned_to.id}}" class="user active">{{assigned_to.name}}</a></span>
+          </div>
+  <div class="issue-end">
+    <div class="issue-corner">
+      <span class="issue-badge show-comments" title="Unestimated">CO</span>
+    </div>
+  </div>
+  <div class="issue-flags">
+    <span class="issue-description show-description" title="Description">
+      <button style="padding:2px;">⌄</button>
+    </span>
+  </div>
+  <div class="rm-grabber" style="background-color:{{color_priority}};"></div>
+</div>
+</script>
+<<={{ }}=>>
+<div style="border: 1px solid gray;">
+  <div>
+    <label>Issues Total: <span class="issues-total"></span></label>
+    <label>Issues Loaded: <span class="issues-loaded"></span></label>
+  </div>
+  <div><button class="load-more">Load more</button></div>
+</div>
+  <div class="issues-table">
+    <ul class="issues-header">
+      <li class="to-do">to do</li>
+      <li class="in-progress">in progress</li>
+      <li class="to-deploy">to deploy</li>
+      <li class="done">done</li>
+    </ul>
+  </div>
