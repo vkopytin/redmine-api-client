@@ -50,8 +50,6 @@ define(function (require) {
             }
 
             this.fetchOpts = {
-                //username: 'che',
-                //password: 'guevara',
                 remove: !data.offset,
                 data: data
             };
